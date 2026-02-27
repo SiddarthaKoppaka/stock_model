@@ -1,0 +1,77 @@
+# DiffSTOCK India Configuration File
+# All hyperparameters - single source of truth
+
+data:
+  start_date: "2015-01-01"
+  end_date: "2026-02-26"
+  lookback_window: 20
+  n_features: 16
+  corr_threshold: 0.4
+  nifty500_url: "https://archives.nseindia.com/content/indices/ind_nifty500list.csv"
+
+  # Data quality thresholds
+  max_missing_pct: 0.15
+  min_trading_days: 500
+  max_zero_volume_pct: 0.10
+  min_adv_crores: 5.0
+
+  # Data cleaning
+  max_ffill_days: 5
+  outlier_threshold: 0.20
+  nifty_index_threshold: 0.05
+
+model:
+  d_model: 128
+  n_heads_mrt: 8
+  n_layers_dicem: 4
+  n_layers_mrt: 3
+  diffusion_T: 200
+  beta_start: 0.0001
+  beta_end: 0.02
+  dropout: 0.25
+
+training:
+  batch_size: 32
+  learning_rate: 0.0003
+  weight_decay: 0.005
+  max_epochs: 150
+  patience: 20
+  grad_clip: 1.0
+  ema_decay: 0.995
+  warmup_steps: 1000
+  noise_augmentation: 0.03
+
+  # Train/val/test split dates
+  train_end: "2022-12-31"
+  val_start: "2023-01-01"
+  val_end: "2024-06-30"
+  test_start: "2024-07-01"
+
+evaluation:
+  primary_metric: "IC"
+  report_every: 5
+  top_k: 20
+  rebalance_freq: "weekly"
+  risk_free_rate: 0.065
+
+  # Indian market transaction costs
+  transaction_costs:
+    brokerage: 0.0003
+    stt_buy: 0.001
+    stt_sell: 0.001
+    exchange: 0.0000335
+    sebi: 0.000001
+    gst: 0.18
+    stamp: 0.00015
+    slippage: 0.002
+
+paths:
+  root: "/Users/siddartha/Documents/Personal/stock_model/diffstock_india"
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  dataset: "data/dataset"
+  checkpoints: "checkpoints"
+  logs: "logs"
+  results: "results"
+
+seed: 42
