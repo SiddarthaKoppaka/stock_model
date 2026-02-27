@@ -57,7 +57,9 @@ results/*.npz
 
 # Jupyter
 .ipynb_checkpoints/
+# Allow Colab notebook in notebooks/
 *.ipynb
+!notebooks/*.ipynb
 
 # OS
 .DS_Store
