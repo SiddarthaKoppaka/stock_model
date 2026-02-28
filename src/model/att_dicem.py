@@ -163,11 +163,11 @@ class AttDiCEm(nn.Module):
         Returns:
             Temporal embeddings of shape (B, N, d_model)
         """
-        B, N, L, F = x.shape
-        assert F == self.in_features, f"Expected {self.in_features} features, got {F}"
+        B, N, L, n_feats = x.shape
+        assert n_feats == self.in_features, f"Expected {self.in_features} features, got {n_feats}"
 
-        # Reshape: treat each stock independently
-        x = x.view(B * N, L, F)  # (B*N, L, F)
+        # Reshape: treat each stock independently (use reshape instead of view for non-contiguous tensors)
+        x = x.reshape(B * N, L, n_feats)  # (B*N, L, n_feats)
 
         # Input projection
         x = self.input_proj(x)  # (B*N, L, d_model)

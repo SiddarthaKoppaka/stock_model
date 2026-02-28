@@ -286,9 +286,9 @@ class DatasetBuilder:
         # Step 6: Assemble final dataset
         logger.info("\nStep 6/6: Assembling final dataset...")
 
-        # Feature columns (15 normalized features)
+        # Feature columns (16 normalized features)
         feature_cols = [
-            'open_ret_norm', 'high_ret_norm', 'low_ret_norm', 'log_volume_norm', 'hl_spread_norm',
+            'open_ret_norm', 'high_ret_norm', 'low_ret_norm', 'close_ret_norm', 'log_volume_norm', 'hl_spread_norm',
             'rsi_14_norm', 'rsi_5_norm', 'bb_pct_norm', 'vol_ratio_5_norm', 'vol_ratio_20_norm',
             'macd_signal_norm', 'atr_14_norm', 'mom_5_norm', 'mom_20_norm', 'close_vwap_norm'
         ]

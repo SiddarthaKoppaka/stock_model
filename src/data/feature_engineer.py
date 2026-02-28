@@ -224,14 +224,14 @@ class FeatureEngineer:
         # Compute technical features
         df = self.compute_technical_features(df)
 
-        # Feature list (excluding close_ret which is the target)
+        # Feature list (including close_ret as a feature, target will be next day's close_ret)
         feature_cols = [
-            'open_ret', 'high_ret', 'low_ret', 'log_volume', 'hl_spread',
+            'open_ret', 'high_ret', 'low_ret', 'close_ret', 'log_volume', 'hl_spread',
             'rsi_14', 'rsi_5', 'bb_pct', 'vol_ratio_5', 'vol_ratio_20',
             'macd_signal', 'atr_14', 'mom_5', 'mom_20', 'close_vwap'
         ]
 
-        # Normalize features (15 features, excluding close_ret)
+        # Normalize features (16 features, including close_ret)
         df = self.normalize_features(df, feature_cols)
 
         # Keep target (close_ret) unnormalized + all normalized features
