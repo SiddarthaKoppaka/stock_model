@@ -165,6 +165,7 @@ class DataCleaner:
         # Step 3: Align to master calendar
         df = df.set_index('Date')
         df = df.reindex(self.master_calendar)
+        df.index.name = 'Date'  # Ensure index has correct name
 
         # Step 4: Calculate returns before filling
         df['log_return'] = np.log(df['Close'] / df['Close'].shift(1))

@@ -74,6 +74,10 @@ class DataValidator:
 
         df = pd.read_parquet(parquet_path)
 
+        # Ensure Date is a column, not index
+        if 'Date' not in df.columns and df.index.name == 'Date':
+            df = df.reset_index()
+
         stats = {
             'available_days': len(df),
             'missing_pct': 0.0,
