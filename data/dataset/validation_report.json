@@ -1,0 +1,4666 @@
+{
+  "total_stocks": 458,
+  "date_range": {
+    "start": "2015-01-01",
+    "end": "2026-02-25"
+  },
+  "total_trading_days": 2753,
+  "per_stock": {
+    "SUNPHARMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AUROPHARMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDIAMART": {
+      "available_days": 2753,
+      "missing_pct": 0.4028332727933164,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-07-04",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=40.28% > 15.00%"
+      ]
+    },
+    "INFY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RADICO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BLUEDART": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TATAPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CONCOR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "UPL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HEROMOTOCO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TATAELXSI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HAL": {
+      "available_days": 2753,
+      "missing_pct": 0.2905920813657828,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-04-02",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=29.06% > 15.00%"
+      ]
+    },
+    "NUVAMA": {
+      "available_days": 2753,
+      "missing_pct": 0.7835088993824918,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-09-26",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=78.35% > 15.00%"
+      ]
+    },
+    "SWANCORP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HOMEFIRST": {
+      "available_days": 2753,
+      "missing_pct": 0.5455866327642572,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-02-03",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=54.56% > 15.00%"
+      ]
+    },
+    "SAREGAMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KALYANKJIL": {
+      "available_days": 2753,
+      "missing_pct": 0.5586632764257174,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-03-26",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=55.87% > 15.00%"
+      ]
+    },
+    "IRFC": {
+      "available_days": 2753,
+      "missing_pct": 0.5444969124591355,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-01-29",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=54.45% > 15.00%"
+      ]
+    },
+    "IRCON": {
+      "available_days": 2753,
+      "missing_pct": 0.33563385397747914,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-09-28",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=33.56% > 15.00%"
+      ]
+    },
+    "DOMS": {
+      "available_days": 2753,
+      "missing_pct": 0.8042135851798039,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-12-20",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=80.42% > 15.00%"
+      ]
+    },
+    "AUBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.22557210316018889,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-07-11",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=22.56% > 15.00%"
+      ]
+    },
+    "MOTHERSON": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "VIJAYA": {
+      "available_days": 2753,
+      "missing_pct": 0.6000726480203414,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-09-14",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=60.01% > 15.00%"
+      ]
+    },
+    "ZENTEC": {
+      "available_days": 2753,
+      "missing_pct": 0.02143116600072648,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-03-30",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KSB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LINDEINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GPIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IOB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GODREJPROP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RITES": {
+      "available_days": 2753,
+      "missing_pct": 0.31420268797675266,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-07-03",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=31.42% > 15.00%"
+      ]
+    },
+    "CGCL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JYOTHYLAB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LUPIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CENTRALBK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FEDERALBNK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TATACOMM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "WOCKPHARMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PPLPHARMA": {
+      "available_days": 2753,
+      "missing_pct": 0.6992371957864149,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-10-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=69.92% > 15.00%"
+      ]
+    },
+    "ALKEM": {
+      "available_days": 2753,
+      "missing_pct": 0.08717762440973484,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-12-23",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ESCORTS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ACE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FIVESTAR": {
+      "available_days": 2753,
+      "missing_pct": 0.7068652379222666,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-11-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=70.69% > 15.00%"
+      ]
+    },
+    "IDEA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ASTRAL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JWL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "WIPRO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ZYDUSLIFE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KAJARIACER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GRAVITA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NAM-INDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.25463131129676714,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-11-06",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.46% > 15.00%"
+      ]
+    },
+    "VTL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MANAPPURAM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDUSTOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SHYAMMETL": {
+      "available_days": 2753,
+      "missing_pct": 0.5800944424264439,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-06-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=58.01% > 15.00%"
+      ]
+    },
+    "GRAPHITE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "APOLLOTYRE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GLAND": {
+      "available_days": 2753,
+      "missing_pct": 0.5274246276788958,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-11-20",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=52.74% > 15.00%"
+      ]
+    },
+    "NCC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDHOTEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BSE": {
+      "available_days": 2753,
+      "missing_pct": 0.18706865237922266,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-02-03",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=18.71% > 15.00%"
+      ]
+    },
+    "GICRE": {
+      "available_days": 2753,
+      "missing_pct": 0.2517253904831093,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-10-25",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.17% > 15.00%"
+      ]
+    },
+    "USHAMART": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IGL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "VEDL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PRESTIGE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DRREDDY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BPCL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CHENNPETRO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CHOLAHLDNG": {
+      "available_days": 2753,
+      "missing_pct": 0.005811841627315656,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "M&MFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RBLBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.14892844169996367,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-08-31",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NETWEB": {
+      "available_days": 2753,
+      "missing_pct": 0.7686160552124954,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-07-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=76.86% > 15.00%"
+      ]
+    },
+    "UNOMINDA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AWL": {
+      "available_days": 2753,
+      "missing_pct": 0.6367598982927716,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-02-08",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=63.68% > 15.00%"
+      ]
+    },
+    "HCLTECH": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LICHSGFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BLUEJET": {
+      "available_days": 2753,
+      "missing_pct": 0.7922266618234654,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-11-01",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=79.22% > 15.00%"
+      ]
+    },
+    "COFORGE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SOLARINDS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LLOYDSME": {
+      "available_days": 2753,
+      "missing_pct": 0.7657101343988376,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-07-17",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=76.57% > 15.00%"
+      ]
+    },
+    "IRCTC": {
+      "available_days": 2753,
+      "missing_pct": 0.4268071195059935,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-10-14",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=42.68% > 15.00%"
+      ]
+    },
+    "MAHABANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GVT&D": {
+      "available_days": 2753,
+      "missing_pct": 0.03886669088267345,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ABCAPITAL": {
+      "available_days": 2753,
+      "missing_pct": 0.2386487468216491,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-09-01",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=23.86% > 15.00%"
+      ]
+    },
+    "TATAINVEST": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MARICO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NEULANDLAB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TITAGARH": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IOC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PNBHOUSING": {
+      "available_days": 2753,
+      "missing_pct": 0.16854340719215402,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-11-07",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=16.85% > 15.00%"
+      ]
+    },
+    "MEDANTA": {
+      "available_days": 2753,
+      "missing_pct": 0.7065019978205593,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-11-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=70.65% > 15.00%"
+      ]
+    },
+    "ZFCVINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GRANULES": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JMFINANCIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HINDPETRO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CASTROLIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JKCEMENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INOXWIND": {
+      "available_days": 2753,
+      "missing_pct": 0.02361060661096985,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-04-09",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BSOFT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "REDINGTON": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DABUR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BASF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CDSL": {
+      "available_days": 2753,
+      "missing_pct": 0.22302942244823828,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-06-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=22.30% > 15.00%"
+      ]
+    },
+    "SHRIRAMFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SUPREMEIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PIIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POLICYBZR": {
+      "available_days": 2753,
+      "missing_pct": 0.615328732292045,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-11-15",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=61.53% > 15.00%"
+      ]
+    },
+    "UCOBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "OFSS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JPPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BANKINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NH": {
+      "available_days": 2753,
+      "missing_pct": 0.0904467853250999,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-01-06",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AMBER": {
+      "available_days": 2753,
+      "missing_pct": 0.27606247729749367,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-01-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=27.61% > 15.00%"
+      ]
+    },
+    "ADANIENSOL": {
+      "available_days": 2753,
+      "missing_pct": 0.7733381765346894,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-08-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=77.33% > 15.00%"
+      ]
+    },
+    "SOBHA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NBCC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ADANIENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FINCABLES": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ANGELONE": {
+      "available_days": 2753,
+      "missing_pct": 0.51507446422085,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-10-05",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=51.51% > 15.00%"
+      ]
+    },
+    "ADANIPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BALKRISIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POLYMED": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CRISIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TCS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MFSL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DEEPAKFERT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "EICHERMOT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "UBL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IDFCFIRSTB": {
+      "available_days": 2753,
+      "missing_pct": 0.07628042135851798,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-11-06",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ASAHIINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BLS": {
+      "available_days": 2753,
+      "missing_pct": 0.12967671630948058,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-06-15",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HINDUNILVR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "OLECTRA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BHEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IDBI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "VOLTAS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ABFRL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PIDILITIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDIGO": {
+      "available_days": 2753,
+      "missing_pct": 0.07700690156193243,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-11-10",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ARE&M": {
+      "available_days": 2753,
+      "missing_pct": 0.7889575009081002,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-10-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=78.90% > 15.00%"
+      ]
+    },
+    "NAUKRI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PNB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ELGIEQUIP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LTIM": {
+      "available_days": 2753,
+      "missing_pct": 0.1387577188521613,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-07-21",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BHARTIARTL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BAJAJHLDNG": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SYRMA": {
+      "available_days": 2753,
+      "missing_pct": 0.6861605521249546,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-08-26",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=68.62% > 15.00%"
+      ]
+    },
+    "TATASTEEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ABBOTINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NIACL": {
+      "available_days": 2753,
+      "missing_pct": 0.2564475118053033,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-11-13",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.64% > 15.00%"
+      ]
+    },
+    "AAVAS": {
+      "available_days": 2753,
+      "missing_pct": 0.3374500544860153,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-10-08",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=33.75% > 15.00%"
+      ]
+    },
+    "ENDURANCE": {
+      "available_days": 2753,
+      "missing_pct": 0.16018888485288776,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-10-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=16.02% > 15.00%"
+      ]
+    },
+    "SAMMAANCAP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SUZLON": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TRENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FORCEMOT": {
+      "available_days": 2753,
+      "missing_pct": 0.438794042862332,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-08-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=43.88% > 15.00%"
+      ]
+    },
+    "ASTERDM": {
+      "available_days": 2753,
+      "missing_pct": 0.2826007991282238,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-02-26",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=28.26% > 15.00%"
+      ]
+    },
+    "NATCOPHARM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KARURVYSYA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HAVELLS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IPCALAB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "3MINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "THERMAX": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BRITANNIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JSWENERGY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NATIONALUM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DLF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TATACONSUM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PFIZER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ASIANPAINT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "COCHINSHIP": {
+      "available_days": 2753,
+      "missing_pct": 0.23392662549945514,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-08-11",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=23.39% > 15.00%"
+      ]
+    },
+    "TTML": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RELIANCE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TVSMOTOR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MCX": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RCF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SBICARD": {
+      "available_days": 2753,
+      "missing_pct": 0.46494733018525247,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-03-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=46.49% > 15.00%"
+      ]
+    },
+    "SUNTV": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDIANB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BHARATFORG": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JINDALSAW": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ASTRAZEN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DEVYANI": {
+      "available_days": 2753,
+      "missing_pct": 0.5931710860879041,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-08-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=59.32% > 15.00%"
+      ]
+    },
+    "ONGC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LODHA": {
+      "available_days": 2753,
+      "missing_pct": 0.5633853977479114,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-04-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=56.34% > 15.00%"
+      ]
+    },
+    "SCHAEFFLER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LTFOODS": {
+      "available_days": 2753,
+      "missing_pct": 0.7915001816200509,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-10-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=79.15% > 15.00%"
+      ]
+    },
+    "BBTC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IIFL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ICICIBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LATENTVIEW": {
+      "available_days": 2753,
+      "missing_pct": 0.6171449328005811,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-11-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=61.71% > 15.00%"
+      ]
+    },
+    "TRITURBINE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POWERINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.4685797312023247,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-03-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=46.86% > 15.00%"
+      ]
+    },
+    "ETERNAL": {
+      "available_days": 2753,
+      "missing_pct": 0.5873592444605884,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-07-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=58.74% > 15.00%"
+      ]
+    },
+    "BOSCHLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SBIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AXISBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KOTAKBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CHOICEIN": {
+      "available_days": 2753,
+      "missing_pct": 0.6516527424627679,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-04-08",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=65.17% > 15.00%"
+      ]
+    },
+    "STARHEALTH": {
+      "available_days": 2753,
+      "missing_pct": 0.6218670541227752,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-12-10",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=62.19% > 15.00%"
+      ]
+    },
+    "MINDACORP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POWERGRID": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ADANIPORTS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KIRLOSBROS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PAYTM": {
+      "available_days": 2753,
+      "missing_pct": 0.6164184525971668,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-11-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=61.64% > 15.00%"
+      ]
+    },
+    "ZENSARTECH": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FORTIS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CONCORDBIO": {
+      "available_days": 2753,
+      "missing_pct": 0.7740646567381039,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-08-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=77.41% > 15.00%"
+      ]
+    },
+    "BANKBARODA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LALPATHLAB": {
+      "available_days": 2753,
+      "missing_pct": 0.08717762440973484,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-12-23",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NAVINFLUOR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KIMS": {
+      "available_days": 2753,
+      "missing_pct": 0.5808209226298583,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-06-28",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=58.08% > 15.00%"
+      ]
+    },
+    "AARTIIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ADANIGREEN": {
+      "available_days": 2753,
+      "missing_pct": 0.3102070468579731,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-06-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=31.02% > 15.00%"
+      ]
+    },
+    "JBMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LICI": {
+      "available_days": 2753,
+      "missing_pct": 0.6603705049037414,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-05-17",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=66.04% > 15.00%"
+      ]
+    },
+    "PGEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NESTLEIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "APARINDS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SBFC": {
+      "available_days": 2753,
+      "missing_pct": 0.7733381765346894,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-08-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=77.33% > 15.00%"
+      ]
+    },
+    "NHPC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DIXON": {
+      "available_days": 2753,
+      "missing_pct": 0.2426443879404286,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-09-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=24.26% > 15.00%"
+      ]
+    },
+    "TECHM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JYOTICNC": {
+      "available_days": 2753,
+      "missing_pct": 0.810751907010534,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2024-01-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=81.08% > 15.00%"
+      ]
+    },
+    "TRIDENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MAHSCOOTER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SUNDRMFAST": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KIRLOSENG": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BERGEPAINT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CIPLA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MAPMYINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.6244097348347257,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-12-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=62.44% > 15.00%"
+      ]
+    },
+    "HAPPSTMNDS": {
+      "available_days": 2753,
+      "missing_pct": 0.5110788231020704,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-09-17",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=51.11% > 15.00%"
+      ]
+    },
+    "INOXINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.8045768252815111,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-12-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=80.46% > 15.00%"
+      ]
+    },
+    "GRSE": {
+      "available_days": 2753,
+      "missing_pct": 0.34144569560479476,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-10-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=34.14% > 15.00%"
+      ]
+    },
+    "TARIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GESHIP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GODFRYPHLP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LAURUSLABS": {
+      "available_days": 2753,
+      "missing_pct": 0.17508172902288413,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-12-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=17.51% > 15.00%"
+      ]
+    },
+    "PHOENIXLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RVNL": {
+      "available_days": 2753,
+      "missing_pct": 0.3828550671994188,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-04-11",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=38.29% > 15.00%"
+      ]
+    },
+    "IREDA": {
+      "available_days": 2753,
+      "missing_pct": 0.7987649836541955,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-11-29",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=79.88% > 15.00%"
+      ]
+    },
+    "JSWSTEEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CGPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BIKAJI": {
+      "available_days": 2753,
+      "missing_pct": 0.705775517617145,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-11-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=70.58% > 15.00%"
+      ]
+    },
+    "RAMCOCEM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "VBL": {
+      "available_days": 2753,
+      "missing_pct": 0.16491100617508173,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-11-08",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=16.49% > 15.00%"
+      ]
+    },
+    "IRB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JUBLINGREA": {
+      "available_days": 2753,
+      "missing_pct": 0.5568470759171813,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-03-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=55.68% > 15.00%"
+      ]
+    },
+    "ABREL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CANFINHOME": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "APLLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HFCL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MGL": {
+      "available_days": 2753,
+      "missing_pct": 0.1340355975299673,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-07-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ABSLAMC": {
+      "available_days": 2753,
+      "missing_pct": 0.6069742099527787,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-10-11",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=60.70% > 15.00%"
+      ]
+    },
+    "ABB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ELECON": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PRAJIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CCL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JUBLPHARMA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CLEAN": {
+      "available_days": 2753,
+      "missing_pct": 0.5862695241554667,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-07-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=58.63% > 15.00%"
+      ]
+    },
+    "COROMANDEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SARDAEN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "EMAMILTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ERIS": {
+      "available_days": 2753,
+      "missing_pct": 0.22302942244823828,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-06-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=22.30% > 15.00%"
+      ]
+    },
+    "LEMONTREE": {
+      "available_days": 2753,
+      "missing_pct": 0.29240828187431894,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-04-09",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=29.24% > 15.00%"
+      ]
+    },
+    "CHALET": {
+      "available_days": 2753,
+      "missing_pct": 0.36796222302942244,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-02-07",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=36.80% > 15.00%"
+      ]
+    },
+    "HSCL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DMART": {
+      "available_days": 2753,
+      "missing_pct": 0.1979658554304395,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-03-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=19.80% > 15.00%"
+      ]
+    },
+    "MANKIND": {
+      "available_days": 2753,
+      "missing_pct": 0.7482746095168906,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-05-09",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=74.83% > 15.00%"
+      ]
+    },
+    "ITI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "APLAPOLLO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "M&M": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BAJFINANCE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NUVOCO": {
+      "available_days": 2753,
+      "missing_pct": 0.594624046494733,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-08-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=59.46% > 15.00%"
+      ]
+    },
+    "FSL": {
+      "available_days": 2753,
+      "missing_pct": 0.18961133309117326,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=18.96% > 15.00%"
+      ]
+    },
+    "GRASIM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ZEEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BANDHANBNK": {
+      "available_days": 2753,
+      "missing_pct": 0.2898656011623683,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-03-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=28.99% > 15.00%"
+      ]
+    },
+    "DATAPATTNS": {
+      "available_days": 2753,
+      "missing_pct": 0.6254994551398474,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-12-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=62.55% > 15.00%"
+      ]
+    },
+    "TORNTPOWER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PERSISTENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JBCHEPHARM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GMRAIRPORT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GODREJAGRO": {
+      "available_days": 2753,
+      "missing_pct": 0.24954594987286596,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-10-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=24.95% > 15.00%"
+      ]
+    },
+    "COALINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PTCIL": {
+      "available_days": 2753,
+      "missing_pct": 0.7566291318561569,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-06-09",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=75.66% > 15.00%"
+      ]
+    },
+    "SCI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MPHASIS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GSPL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CUB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HONAUT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NSLNISP": {
+      "available_days": 2753,
+      "missing_pct": 0.7301126044315293,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-02-20",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=73.01% > 15.00%"
+      ]
+    },
+    "DIVISLAB": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HEG": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GAIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SJVN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "EXIDEIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "IEX": {
+      "available_days": 2753,
+      "missing_pct": 0.2509989102796949,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-10-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.10% > 15.00%"
+      ]
+    },
+    "EIHOTEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "OBEROIRLTY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CRAFTSMAN": {
+      "available_days": 2753,
+      "missing_pct": 0.5583000363240102,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-03-25",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=55.83% > 15.00%"
+      ]
+    },
+    "DCMSHRIRAM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CERA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MANYAVAR": {
+      "available_days": 2753,
+      "missing_pct": 0.6389393389030149,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-02-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=63.89% > 15.00%"
+      ]
+    },
+    "ECLERX": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CAMS": {
+      "available_days": 2753,
+      "missing_pct": 0.51507446422085,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-10-05",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=51.51% > 15.00%"
+      ]
+    },
+    "SIEMENS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KEC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CUMMINSIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "APOLLOHOSP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SUMICHEM": {
+      "available_days": 2753,
+      "missing_pct": 0.4529604068289139,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-01-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=45.30% > 15.00%"
+      ]
+    },
+    "BALRAMCHIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AKZOINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MAXHEALTH": {
+      "available_days": 2753,
+      "missing_pct": 0.5041772611696331,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-08-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=50.42% > 15.00%"
+      ]
+    },
+    "LTTS": {
+      "available_days": 2753,
+      "missing_pct": 0.1543770432255721,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-09-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=15.44% > 15.00%"
+      ]
+    },
+    "CHAMBLFERT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AJANTPHARM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HINDALCO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "WELSPUNLIV": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RAILTEL": {
+      "available_days": 2753,
+      "missing_pct": 0.55176171449328,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-02-26",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=55.18% > 15.00%"
+      ]
+    },
+    "APTUS": {
+      "available_days": 2753,
+      "missing_pct": 0.5949872865964403,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-08-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=59.50% > 15.00%"
+      ]
+    },
+    "UTIAMC": {
+      "available_days": 2753,
+      "missing_pct": 0.5172539048310933,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-10-13",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=51.73% > 15.00%"
+      ]
+    },
+    "VGUARD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MMTC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GILLETTE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BDL": {
+      "available_days": 2753,
+      "missing_pct": 0.2891391209589539,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-03-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=28.91% > 15.00%"
+      ]
+    },
+    "CENTURYPLY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JSWINFRA": {
+      "available_days": 2753,
+      "missing_pct": 0.7849618597893208,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-10-03",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=78.50% > 15.00%"
+      ]
+    },
+    "NYKAA": {
+      "available_days": 2753,
+      "missing_pct": 0.6142390119869233,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-11-10",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=61.42% > 15.00%"
+      ]
+    },
+    "MARUTI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ICICIPRULI": {
+      "available_days": 2753,
+      "missing_pct": 0.15583000363240102,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-09-29",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=15.58% > 15.00%"
+      ]
+    },
+    "MRPL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "YESBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FINPIPE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ATGL": {
+      "available_days": 2753,
+      "missing_pct": 0.3443516164184526,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-11-05",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=34.44% > 15.00%"
+      ]
+    },
+    "WELCORP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NLCINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PCBL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TITAN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CROMPTON": {
+      "available_days": 2753,
+      "missing_pct": 0.1213221939702143,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2016-05-13",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BATAINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RAINBOW": {
+      "available_days": 2753,
+      "missing_pct": 0.6585543043952052,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-05-10",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=65.86% > 15.00%"
+      ]
+    },
+    "KPIL": {
+      "available_days": 2753,
+      "missing_pct": 0.7537232110424991,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-05-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=75.37% > 15.00%"
+      ]
+    },
+    "J&KBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.1925172539048311,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-02-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=19.25% > 15.00%"
+      ]
+    },
+    "MOTILALOFS": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ACC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BAJAJFINSV": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NMDC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ASHOKLEY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SUNDARMFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KPRMILL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CESC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PFC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NEWGEN": {
+      "available_days": 2753,
+      "missing_pct": 0.27569923719578643,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-01-29",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=27.57% > 15.00%"
+      ]
+    },
+    "CREDITACC": {
+      "available_days": 2753,
+      "missing_pct": 0.32691609153650564,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-08-23",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=32.69% > 15.00%"
+      ]
+    },
+    "DBREALTY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SYNGENE": {
+      "available_days": 2753,
+      "missing_pct": 0.0548492553577915,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-08-11",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ENGINERSIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NAVA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KAYNES": {
+      "available_days": 2753,
+      "missing_pct": 0.7072284780239738,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-11-22",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=70.72% > 15.00%"
+      ]
+    },
+    "JUBLFOOD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "WHIRLPOOL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MSUMI": {
+      "available_days": 2753,
+      "missing_pct": 0.6483835815474028,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-03-28",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=64.84% > 15.00%"
+      ]
+    },
+    "FLUOROCHEM": {
+      "available_days": 2753,
+      "missing_pct": 0.4275335997094079,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-10-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=42.75% > 15.00%"
+      ]
+    },
+    "BRIGADE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SAIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HDFCBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JSL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SHREECEM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SIGNATURE": {
+      "available_days": 2753,
+      "missing_pct": 0.7838721394841991,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-09-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=78.39% > 15.00%"
+      ]
+    },
+    "ICICIGI": {
+      "available_days": 2753,
+      "missing_pct": 0.24518706865237921,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-09-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=24.52% > 15.00%"
+      ]
+    },
+    "PGHH": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INTELLECT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "FACT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "OIL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DEEPAKNTR": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GLAXO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BAYERCROP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LTF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CEATLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "NTPC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SONATSOFTW": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JIOFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.7744278968398112,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-08-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=77.44% > 15.00%"
+      ]
+    },
+    "HINDCOPPER": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ALOKINDS": {
+      "available_days": 2753,
+      "missing_pct": 0.002905920813657828,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PETRONET": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDIACEM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ITC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MAHSEAMLES": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GUJGASLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.06393025790047221,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-09-15",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POONAWALLA": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BIOCON": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SBILIFE": {
+      "available_days": 2753,
+      "missing_pct": 0.2462767889575009,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-10-03",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=24.63% > 15.00%"
+      ]
+    },
+    "IFCI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PAGEIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TEJASNET": {
+      "available_days": 2753,
+      "missing_pct": 0.2219397021431166,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-06-27",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=22.19% > 15.00%"
+      ]
+    },
+    "COLPAL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ANANDRATHI": {
+      "available_days": 2753,
+      "missing_pct": 0.6225935343261896,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-12-14",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=62.26% > 15.00%"
+      ]
+    },
+    "SRF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TECHNOE": {
+      "available_days": 2753,
+      "missing_pct": 0.02579004722121322,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TATATECH": {
+      "available_days": 2753,
+      "missing_pct": 0.7991282237559026,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-11-30",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=79.91% > 15.00%"
+      ]
+    },
+    "TATACHEM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "INDUSINDBK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JKTYRE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AIAENG": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TIMKEN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HDFCAMC": {
+      "available_days": 2753,
+      "missing_pct": 0.3229204504177261,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-08-06",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=32.29% > 15.00%"
+      ]
+    },
+    "ALKYLAMINE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CHOLAFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SAPPHIRE": {
+      "available_days": 2753,
+      "missing_pct": 0.6164184525971668,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-11-18",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=61.64% > 15.00%"
+      ]
+    },
+    "BAJAJ-AUTO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RHIM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CYIENT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KEI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HDFCLIFE": {
+      "available_days": 2753,
+      "missing_pct": 0.2579004722121322,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-11-17",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.79% > 15.00%"
+      ]
+    },
+    "TRIVENI": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "LT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GMDCLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BEML": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "POLYCAB": {
+      "available_days": 2753,
+      "missing_pct": 0.3839447875045405,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-04-16",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=38.39% > 15.00%"
+      ]
+    },
+    "MAZDOCK": {
+      "available_days": 2753,
+      "missing_pct": 0.5168906647293862,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2020-10-12",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=51.69% > 15.00%"
+      ]
+    },
+    "TIINDIA": {
+      "available_days": 2753,
+      "missing_pct": 0.2539048310933527,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-11-02",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=25.39% > 15.00%"
+      ]
+    },
+    "HUDCO": {
+      "available_days": 2753,
+      "missing_pct": 0.21249545949872867,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2017-05-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=21.25% > 15.00%"
+      ]
+    },
+    "MRF": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "KPITTECH": {
+      "available_days": 2753,
+      "missing_pct": 0.38467126770795496,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-04-22",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=38.47% > 15.00%"
+      ]
+    },
+    "UNIONBANK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CAPLIPOINT": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RKFORGE": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ANANTRAJ": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "HINDZINC": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "AFFLE": {
+      "available_days": 2753,
+      "missing_pct": 0.4119142753359971,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-08-08",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=41.19% > 15.00%"
+      ]
+    },
+    "GODREJIND": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "MUTHOOTFIN": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "CANBK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DELHIVERY": {
+      "available_days": 2753,
+      "missing_pct": 0.6621867054122775,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-05-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=66.22% > 15.00%"
+      ]
+    },
+    "CARBORUNIV": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "JINDALSTEL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "DALBHARAT": {
+      "available_days": 2753,
+      "missing_pct": 0.3585179803850345,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2018-12-21",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=35.85% > 15.00%"
+      ]
+    },
+    "CAMPUS": {
+      "available_days": 2753,
+      "missing_pct": 0.658191064293498,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-05-09",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=65.82% > 15.00%"
+      ]
+    },
+    "ULTRACEMCO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "TORNTPHARM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "BLUESTARCO": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "SONACOMS": {
+      "available_days": 2753,
+      "missing_pct": 0.5800944424264439,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2021-06-24",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=58.01% > 15.00%"
+      ]
+    },
+    "HONASA": {
+      "available_days": 2753,
+      "missing_pct": 0.7936796222302942,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-11-07",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=79.37% > 15.00%"
+      ]
+    },
+    "KFINTECH": {
+      "available_days": 2753,
+      "missing_pct": 0.717035960770069,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-12-29",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=71.70% > 15.00%"
+      ]
+    },
+    "EIDPARRY": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "ATUL": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "PVRINOX": {
+      "available_days": 2753,
+      "missing_pct": 0.704322557210316,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2022-11-10",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=70.43% > 15.00%"
+      ]
+    },
+    "RECLTD": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GLENMARK": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "360ONE": {
+      "available_days": 2753,
+      "missing_pct": 0.42135851798038504,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-09-19",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=42.14% > 15.00%"
+      ]
+    },
+    "PATANJALI": {
+      "available_days": 2753,
+      "missing_pct": 0.01670904467853251,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "METROPOLIS": {
+      "available_days": 2753,
+      "missing_pct": 0.3835815474028333,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2019-04-15",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=38.36% > 15.00%"
+      ]
+    },
+    "AMBUJACEM": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "GODREJCP": {
+      "available_days": 2753,
+      "missing_pct": 0.0,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2015-01-01",
+      "passes_threshold": true,
+      "exclusion_reasons": []
+    },
+    "RRKABEL": {
+      "available_days": 2753,
+      "missing_pct": 0.782055938975663,
+      "zero_volume_days": 0,
+      "outlier_days": 0,
+      "listing_date": "2023-09-20",
+      "passes_threshold": false,
+      "exclusion_reasons": [
+        "missing_pct=78.21% > 15.00%"
+      ]
+    }
+  },
+  "excluded_stocks": [
+    "INDIAMART",
+    "HAL",
+    "NUVAMA",
+    "HOMEFIRST",
+    "KALYANKJIL",
+    "IRFC",
+    "IRCON",
+    "DOMS",
+    "AUBANK",
+    "VIJAYA",
+    "RITES",
+    "PPLPHARMA",
+    "FIVESTAR",
+    "NAM-INDIA",
+    "SHYAMMETL",
+    "GLAND",
+    "BSE",
+    "GICRE",
+    "NETWEB",
+    "AWL",
+    "BLUEJET",
+    "LLOYDSME",
+    "IRCTC",
+    "ABCAPITAL",
+    "PNBHOUSING",
+    "MEDANTA",
+    "CDSL",
+    "POLICYBZR",
+    "AMBER",
+    "ADANIENSOL",
+    "ANGELONE",
+    "ARE&M",
+    "SYRMA",
+    "NIACL",
+    "AAVAS",
+    "ENDURANCE",
+    "FORCEMOT",
+    "ASTERDM",
+    "COCHINSHIP",
+    "SBICARD",
+    "DEVYANI",
+    "LODHA",
+    "LTFOODS",
+    "LATENTVIEW",
+    "POWERINDIA",
+    "ETERNAL",
+    "CHOICEIN",
+    "STARHEALTH",
+    "PAYTM",
+    "CONCORDBIO",
+    "KIMS",
+    "ADANIGREEN",
+    "LICI",
+    "SBFC",
+    "DIXON",
+    "JYOTICNC",
+    "MAPMYINDIA",
+    "HAPPSTMNDS",
+    "INOXINDIA",
+    "GRSE",
+    "LAURUSLABS",
+    "RVNL",
+    "IREDA",
+    "BIKAJI",
+    "VBL",
+    "JUBLINGREA",
+    "ABSLAMC",
+    "CLEAN",
+    "ERIS",
+    "LEMONTREE",
+    "CHALET",
+    "DMART",
+    "MANKIND",
+    "NUVOCO",
+    "FSL",
+    "BANDHANBNK",
+    "DATAPATTNS",
+    "GODREJAGRO",
+    "PTCIL",
+    "NSLNISP",
+    "IEX",
+    "CRAFTSMAN",
+    "MANYAVAR",
+    "CAMS",
+    "SUMICHEM",
+    "MAXHEALTH",
+    "LTTS",
+    "RAILTEL",
+    "APTUS",
+    "UTIAMC",
+    "BDL",
+    "JSWINFRA",
+    "NYKAA",
+    "ICICIPRULI",
+    "ATGL",
+    "RAINBOW",
+    "KPIL",
+    "J&KBANK",
+    "NEWGEN",
+    "CREDITACC",
+    "KAYNES",
+    "MSUMI",
+    "FLUOROCHEM",
+    "SIGNATURE",
+    "ICICIGI",
+    "JIOFIN",
+    "SBILIFE",
+    "TEJASNET",
+    "ANANDRATHI",
+    "TATATECH",
+    "HDFCAMC",
+    "SAPPHIRE",
+    "HDFCLIFE",
+    "POLYCAB",
+    "MAZDOCK",
+    "TIINDIA",
+    "HUDCO",
+    "KPITTECH",
+    "AFFLE",
+    "DELHIVERY",
+    "DALBHARAT",
+    "CAMPUS",
+    "SONACOMS",
+    "HONASA",
+    "KFINTECH",
+    "PVRINOX",
+    "360ONE",
+    "METROPOLIS",
+    "RRKABEL"
+  ],
+  "exclusion_reasons": {
+    "INDIAMART": "missing_pct=40.28% > 15.00%",
+    "HAL": "missing_pct=29.06% > 15.00%",
+    "NUVAMA": "missing_pct=78.35% > 15.00%",
+    "HOMEFIRST": "missing_pct=54.56% > 15.00%",
+    "KALYANKJIL": "missing_pct=55.87% > 15.00%",
+    "IRFC": "missing_pct=54.45% > 15.00%",
+    "IRCON": "missing_pct=33.56% > 15.00%",
+    "DOMS": "missing_pct=80.42% > 15.00%",
+    "AUBANK": "missing_pct=22.56% > 15.00%",
+    "VIJAYA": "missing_pct=60.01% > 15.00%",
+    "RITES": "missing_pct=31.42% > 15.00%",
+    "PPLPHARMA": "missing_pct=69.92% > 15.00%",
+    "FIVESTAR": "missing_pct=70.69% > 15.00%",
+    "NAM-INDIA": "missing_pct=25.46% > 15.00%",
+    "SHYAMMETL": "missing_pct=58.01% > 15.00%",
+    "GLAND": "missing_pct=52.74% > 15.00%",
+    "BSE": "missing_pct=18.71% > 15.00%",
+    "GICRE": "missing_pct=25.17% > 15.00%",
+    "NETWEB": "missing_pct=76.86% > 15.00%",
+    "AWL": "missing_pct=63.68% > 15.00%",
+    "BLUEJET": "missing_pct=79.22% > 15.00%",
+    "LLOYDSME": "missing_pct=76.57% > 15.00%",
+    "IRCTC": "missing_pct=42.68% > 15.00%",
+    "ABCAPITAL": "missing_pct=23.86% > 15.00%",
+    "PNBHOUSING": "missing_pct=16.85% > 15.00%",
+    "MEDANTA": "missing_pct=70.65% > 15.00%",
+    "CDSL": "missing_pct=22.30% > 15.00%",
+    "POLICYBZR": "missing_pct=61.53% > 15.00%",
+    "AMBER": "missing_pct=27.61% > 15.00%",
+    "ADANIENSOL": "missing_pct=77.33% > 15.00%",
+    "ANGELONE": "missing_pct=51.51% > 15.00%",
+    "ARE&M": "missing_pct=78.90% > 15.00%",
+    "SYRMA": "missing_pct=68.62% > 15.00%",
+    "NIACL": "missing_pct=25.64% > 15.00%",
+    "AAVAS": "missing_pct=33.75% > 15.00%",
+    "ENDURANCE": "missing_pct=16.02% > 15.00%",
+    "FORCEMOT": "missing_pct=43.88% > 15.00%",
+    "ASTERDM": "missing_pct=28.26% > 15.00%",
+    "COCHINSHIP": "missing_pct=23.39% > 15.00%",
+    "SBICARD": "missing_pct=46.49% > 15.00%",
+    "DEVYANI": "missing_pct=59.32% > 15.00%",
+    "LODHA": "missing_pct=56.34% > 15.00%",
+    "LTFOODS": "missing_pct=79.15% > 15.00%",
+    "LATENTVIEW": "missing_pct=61.71% > 15.00%",
+    "POWERINDIA": "missing_pct=46.86% > 15.00%",
+    "ETERNAL": "missing_pct=58.74% > 15.00%",
+    "CHOICEIN": "missing_pct=65.17% > 15.00%",
+    "STARHEALTH": "missing_pct=62.19% > 15.00%",
+    "PAYTM": "missing_pct=61.64% > 15.00%",
+    "CONCORDBIO": "missing_pct=77.41% > 15.00%",
+    "KIMS": "missing_pct=58.08% > 15.00%",
+    "ADANIGREEN": "missing_pct=31.02% > 15.00%",
+    "LICI": "missing_pct=66.04% > 15.00%",
+    "SBFC": "missing_pct=77.33% > 15.00%",
+    "DIXON": "missing_pct=24.26% > 15.00%",
+    "JYOTICNC": "missing_pct=81.08% > 15.00%",
+    "MAPMYINDIA": "missing_pct=62.44% > 15.00%",
+    "HAPPSTMNDS": "missing_pct=51.11% > 15.00%",
+    "INOXINDIA": "missing_pct=80.46% > 15.00%",
+    "GRSE": "missing_pct=34.14% > 15.00%",
+    "LAURUSLABS": "missing_pct=17.51% > 15.00%",
+    "RVNL": "missing_pct=38.29% > 15.00%",
+    "IREDA": "missing_pct=79.88% > 15.00%",
+    "BIKAJI": "missing_pct=70.58% > 15.00%",
+    "VBL": "missing_pct=16.49% > 15.00%",
+    "JUBLINGREA": "missing_pct=55.68% > 15.00%",
+    "ABSLAMC": "missing_pct=60.70% > 15.00%",
+    "CLEAN": "missing_pct=58.63% > 15.00%",
+    "ERIS": "missing_pct=22.30% > 15.00%",
+    "LEMONTREE": "missing_pct=29.24% > 15.00%",
+    "CHALET": "missing_pct=36.80% > 15.00%",
+    "DMART": "missing_pct=19.80% > 15.00%",
+    "MANKIND": "missing_pct=74.83% > 15.00%",
+    "NUVOCO": "missing_pct=59.46% > 15.00%",
+    "FSL": "missing_pct=18.96% > 15.00%",
+    "BANDHANBNK": "missing_pct=28.99% > 15.00%",
+    "DATAPATTNS": "missing_pct=62.55% > 15.00%",
+    "GODREJAGRO": "missing_pct=24.95% > 15.00%",
+    "PTCIL": "missing_pct=75.66% > 15.00%",
+    "NSLNISP": "missing_pct=73.01% > 15.00%",
+    "IEX": "missing_pct=25.10% > 15.00%",
+    "CRAFTSMAN": "missing_pct=55.83% > 15.00%",
+    "MANYAVAR": "missing_pct=63.89% > 15.00%",
+    "CAMS": "missing_pct=51.51% > 15.00%",
+    "SUMICHEM": "missing_pct=45.30% > 15.00%",
+    "MAXHEALTH": "missing_pct=50.42% > 15.00%",
+    "LTTS": "missing_pct=15.44% > 15.00%",
+    "RAILTEL": "missing_pct=55.18% > 15.00%",
+    "APTUS": "missing_pct=59.50% > 15.00%",
+    "UTIAMC": "missing_pct=51.73% > 15.00%",
+    "BDL": "missing_pct=28.91% > 15.00%",
+    "JSWINFRA": "missing_pct=78.50% > 15.00%",
+    "NYKAA": "missing_pct=61.42% > 15.00%",
+    "ICICIPRULI": "missing_pct=15.58% > 15.00%",
+    "ATGL": "missing_pct=34.44% > 15.00%",
+    "RAINBOW": "missing_pct=65.86% > 15.00%",
+    "KPIL": "missing_pct=75.37% > 15.00%",
+    "J&KBANK": "missing_pct=19.25% > 15.00%",
+    "NEWGEN": "missing_pct=27.57% > 15.00%",
+    "CREDITACC": "missing_pct=32.69% > 15.00%",
+    "KAYNES": "missing_pct=70.72% > 15.00%",
+    "MSUMI": "missing_pct=64.84% > 15.00%",
+    "FLUOROCHEM": "missing_pct=42.75% > 15.00%",
+    "SIGNATURE": "missing_pct=78.39% > 15.00%",
+    "ICICIGI": "missing_pct=24.52% > 15.00%",
+    "JIOFIN": "missing_pct=77.44% > 15.00%",
+    "SBILIFE": "missing_pct=24.63% > 15.00%",
+    "TEJASNET": "missing_pct=22.19% > 15.00%",
+    "ANANDRATHI": "missing_pct=62.26% > 15.00%",
+    "TATATECH": "missing_pct=79.91% > 15.00%",
+    "HDFCAMC": "missing_pct=32.29% > 15.00%",
+    "SAPPHIRE": "missing_pct=61.64% > 15.00%",
+    "HDFCLIFE": "missing_pct=25.79% > 15.00%",
+    "POLYCAB": "missing_pct=38.39% > 15.00%",
+    "MAZDOCK": "missing_pct=51.69% > 15.00%",
+    "TIINDIA": "missing_pct=25.39% > 15.00%",
+    "HUDCO": "missing_pct=21.25% > 15.00%",
+    "KPITTECH": "missing_pct=38.47% > 15.00%",
+    "AFFLE": "missing_pct=41.19% > 15.00%",
+    "DELHIVERY": "missing_pct=66.22% > 15.00%",
+    "DALBHARAT": "missing_pct=35.85% > 15.00%",
+    "CAMPUS": "missing_pct=65.82% > 15.00%",
+    "SONACOMS": "missing_pct=58.01% > 15.00%",
+    "HONASA": "missing_pct=79.37% > 15.00%",
+    "KFINTECH": "missing_pct=71.70% > 15.00%",
+    "PVRINOX": "missing_pct=70.43% > 15.00%",
+    "360ONE": "missing_pct=42.14% > 15.00%",
+    "METROPOLIS": "missing_pct=38.36% > 15.00%",
+    "RRKABEL": "missing_pct=78.21% > 15.00%"
+  },
+  "sector_coverage": {
+    "Healthcare": 31,
+    "Technology": 20,
+    "Consumer Defensive": 21,
+    "Industrials": 69,
+    "Utilities": 17,
+    "Basic Materials": 51,
+    "Consumer Cyclical": 38,
+    "Communication Services": 9,
+    "Financial Services": 50,
+    "Real Estate": 10,
+    "Energy": 13
+  },
+  "unknown_sector_count": 0
+}

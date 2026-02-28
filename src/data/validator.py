@@ -199,8 +199,28 @@ class DataValidator:
 
     def save_report(self, report: Dict, output_path: Path) -> None:
         """Save validation report to JSON."""
+
+        def convert_to_json_serializable(obj):
+            """Convert numpy types to native Python types."""
+            if isinstance(obj, dict):
+                return {k: convert_to_json_serializable(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_to_json_serializable(item) for item in obj]
+            elif isinstance(obj, (np.int64, np.int32, np.int16, np.int8)):
+                return int(obj)
+            elif isinstance(obj, (np.float64, np.float32, np.float16)):
+                return float(obj)
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, np.bool_):
+                return bool(obj)
+            else:
+                return obj
+
+        serializable_report = convert_to_json_serializable(report)
+
         with open(output_path, 'w') as f:
-            json.dump(report, f, indent=2)
+            json.dump(serializable_report, f, indent=2)
         logger.info(f"Validation report saved to {output_path}")
 
 
