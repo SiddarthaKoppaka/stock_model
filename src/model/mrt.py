@@ -79,9 +79,10 @@ class MultiHeadRelationalAttention(nn.Module):
             mask = mask.unsqueeze(0).unsqueeze(0)  # (1, 1, N, N)
             mask = mask.expand(B, self.n_heads, N, N)
 
-            # Apply mask: where mask is False, set to large negative (compatible with FP16)
-            # Use -1e4 instead of -1e9 to avoid overflow in mixed precision training
-            scores = scores.masked_fill(~mask, -1e4)
+            # Apply mask: use torch.finfo to get appropriate min value for the dtype
+            # This automatically handles FP16, FP32, etc. without overflow
+            mask_value = torch.finfo(scores.dtype).min
+            scores = scores.masked_fill(~mask, mask_value)
 
         # Softmax
         attn_weights = F.softmax(scores, dim=-1)  # (B, h, N, N)
