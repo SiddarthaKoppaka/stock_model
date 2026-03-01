@@ -78,6 +78,10 @@ class DataValidator:
         if 'Date' not in df.columns and df.index.name == 'Date':
             df = df.reset_index()
 
+        # Check if required columns exist
+        if 'Close' not in df.columns:
+            return False, {'error': 'Missing Close column'}
+
         stats = {
             'available_days': len(df),
             'missing_pct': 0.0,
@@ -88,10 +92,16 @@ class DataValidator:
         }
 
         # Calculate missing data percentage
-        stats['missing_pct'] = df[['Close', 'Volume']].isna().mean().mean()
+        cols_to_check = ['Close']
+        if 'Volume' in df.columns:
+            cols_to_check.append('Volume')
+        stats['missing_pct'] = df[cols_to_check].isna().mean().mean()
 
         # Count zero volume days
-        stats['zero_volume_days'] = (df['Volume'] == 0).sum()
+        if 'Volume' in df.columns:
+            stats['zero_volume_days'] = (df['Volume'] == 0).sum()
+        else:
+            stats['zero_volume_days'] = 0
 
         # Determine listing date (first non-NaN close)
         first_valid_idx = df['Close'].first_valid_index()

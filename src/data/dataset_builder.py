@@ -208,6 +208,16 @@ class DatasetBuilder:
         dates_all = np.array(date_samples)
         splits_all = np.array(split_labels)
 
+        # Handle NaN values (replace with 0 for normalized features)
+        nan_count_x = np.isnan(X_all).sum()
+        nan_count_y = np.isnan(y_all).sum()
+        if nan_count_x > 0:
+            logger.warning(f"Found {nan_count_x} NaN values in X features, filling with 0")
+            X_all = np.nan_to_num(X_all, nan=0.0)
+        if nan_count_y > 0:
+            logger.warning(f"Found {nan_count_y} NaN values in y targets, filling with 0")
+            y_all = np.nan_to_num(y_all, nan=0.0)
+
         logger.info(f"Total samples created: {len(X_all)}")
 
         # Split
