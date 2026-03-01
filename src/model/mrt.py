@@ -79,8 +79,9 @@ class MultiHeadRelationalAttention(nn.Module):
             mask = mask.unsqueeze(0).unsqueeze(0)  # (1, 1, N, N)
             mask = mask.expand(B, self.n_heads, N, N)
 
-            # Apply mask: where mask is False, set to -inf
-            scores = scores.masked_fill(~mask, float('-1e9'))
+            # Apply mask: where mask is False, set to large negative (compatible with FP16)
+            # Use -1e4 instead of -1e9 to avoid overflow in mixed precision training
+            scores = scores.masked_fill(~mask, -1e4)
 
         # Softmax
         attn_weights = F.softmax(scores, dim=-1)  # (B, h, N, N)
