@@ -2,11 +2,19 @@
 Relation Matrix Builder
 
 Builds three N×N relation matrices:
-1. Sector relation (binary)
-2. Industry relation (binary)
-3. Price correlation (continuous, thresholded)
+1. Sector relation   — binary float32, symmetric
+2. Industry relation — binary float32, symmetric
+3. Price correlation — continuous float32, SYMMETRIC (FIXED), thresholded at 0.25
 
-CRITICAL: Correlation matrix computed ONLY on training period to avoid lookahead bias.
+CRITICAL: Correlation computed ONLY on training period to avoid lookahead bias.
+
+Bug fixes vs original:
+  [1] R_corr was asymmetric due to row-stochastic normalization destroying symmetry
+      → Replaced normalization with raw thresholded |corr| + explicit symmetry assertion
+  [2] corr_threshold lowered from 0.4 → 0.25 (Indian markets have lower cross-correlation)
+  [3] R_mask density was ~13% (too sparse) → new threshold yields target 25-35%
+  [4] Binary masks remain binary float32; R_corr stores actual correlation values for
+      optional weighted attention (not flattened to 0/1)
 
 Inputs:
     - data/processed/{SYMBOL}_features.parquet: Feature data
@@ -18,279 +26,362 @@ Outputs:
 
 import json
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from loguru import logger
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Defaults matching config.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+DEFAULT_CORR_THRESHOLD = 0.25   # was 0.4 — too aggressive for Indian markets
+DEFAULT_TRAIN_END_DATE = "2022-12-31"
+TARGET_DENSITY_LOW     = 0.25   # warn if combined mask falls below this
+TARGET_DENSITY_HIGH    = 0.35   # warn if combined mask exceeds this
+
+
 class RelationBuilder:
     """
-    Builds relation matrices for Masked Relational Transformer.
+    Builds relation matrices for the Masked Relational Transformer (MRT).
+
+    Key invariants enforced:
+      - All matrices are symmetric (verified with assertion)
+      - No self-loops (diagonal = 0)
+      - R_corr stores raw thresholded |correlation| values (not row-normalized)
+      - Isolated stocks get fallback full-sector connections
     """
 
     def __init__(
         self,
         processed_data_dir: Path,
         metadata_path: Path,
-        corr_threshold: float = 0.4,
-        train_end_date: str = "2022-12-31"
+        corr_threshold: float = DEFAULT_CORR_THRESHOLD,
+        train_end_date: str = DEFAULT_TRAIN_END_DATE,
     ):
         """
-        Initialize relation builder.
-
         Args:
-            processed_data_dir: Directory with feature parquet files
-            metadata_path: Path to metadata JSON
-            corr_threshold: Minimum correlation to create edge
-            train_end_date: End date of training period for correlation calculation
+            processed_data_dir: Directory containing {SYMBOL}_features.parquet files
+            metadata_path: Path to metadata.json with sector/industry info
+            corr_threshold: Minimum |correlation| to create an edge in R_corr.
+                            0.25 recommended for Nifty 500 (was 0.4, too aggressive).
+            train_end_date: Correlation computed only on dates <= this to prevent leakage.
         """
         self.processed_data_dir = Path(processed_data_dir)
-        self.metadata_path = Path(metadata_path)
-        self.corr_threshold = corr_threshold
-        self.train_end_date = pd.to_datetime(train_end_date)
+        self.metadata_path      = Path(metadata_path)
+        self.corr_threshold     = corr_threshold
+        self.train_end_date     = pd.to_datetime(train_end_date)
 
-        # Load metadata
-        with open(self.metadata_path, 'r') as f:
+        with open(self.metadata_path, "r") as f:
             self.metadata = json.load(f)
 
-        logger.info(f"RelationBuilder initialized (corr_threshold={corr_threshold})")
+        logger.info(
+            f"RelationBuilder initialized | corr_threshold={corr_threshold} | "
+            f"train_end={train_end_date}"
+        )
+
+    # ── 1. Sector relation ────────────────────────────────────────────────────
 
     def build_sector_relation(self, stock_list: List[str]) -> np.ndarray:
         """
-        Build binary sector relation matrix.
-
-        Args:
-            stock_list: Ordered list of stock symbols
+        Binary symmetric matrix: R[i,j] = 1 if stocks i and j share the same sector.
+        'Unknown' sector stocks are never connected.
 
         Returns:
-            N×N binary matrix where R[i,j]=1 if same sector
+            (N, N) float32 binary matrix
         """
-        N = len(stock_list)
+        N       = len(stock_list)
+        sectors = [
+            self.metadata.get(s, {}).get("sector", "Unknown")
+            for s in stock_list
+        ]
+
         R_sector = np.zeros((N, N), dtype=np.float32)
-
-        # Get sectors for all stocks
-        sectors = []
-        for symbol in stock_list:
-            sector = self.metadata.get(symbol, {}).get('sector', 'Unknown')
-            sectors.append(sector)
-
-        # Build relation matrix
         for i in range(N):
+            if sectors[i] == "Unknown":
+                continue
             for j in range(N):
-                if i != j and sectors[i] != 'Unknown' and sectors[i] == sectors[j]:
+                if i != j and sectors[i] == sectors[j]:
                     R_sector[i, j] = 1.0
 
-        connection_count = R_sector.sum()
-        logger.info(f"Sector relation matrix: {connection_count:.0f} connections")
+        # Verify symmetry
+        assert np.allclose(R_sector, R_sector.T), "R_sector not symmetric — this is a bug"
 
+        density = (R_sector > 0).mean()
+        logger.info(f"R_sector   | connections: {int(R_sector.sum()):,} | density: {density:.2%}")
         return R_sector
+
+    # ── 2. Industry relation ──────────────────────────────────────────────────
 
     def build_industry_relation(self, stock_list: List[str]) -> np.ndarray:
         """
-        Build binary industry relation matrix.
-
-        Args:
-            stock_list: Ordered list of stock symbols
+        Binary symmetric matrix: R[i,j] = 1 if stocks i and j share the same industry.
+        'Unknown' industry stocks are never connected.
 
         Returns:
-            N×N binary matrix where R[i,j]=1 if same industry
+            (N, N) float32 binary matrix
         """
-        N = len(stock_list)
+        N          = len(stock_list)
+        industries = [
+            self.metadata.get(s, {}).get("industry", "Unknown")
+            for s in stock_list
+        ]
+
         R_industry = np.zeros((N, N), dtype=np.float32)
-
-        # Get industries for all stocks
-        industries = []
-        for symbol in stock_list:
-            industry = self.metadata.get(symbol, {}).get('industry', 'Unknown')
-            industries.append(industry)
-
-        # Build relation matrix
         for i in range(N):
+            if industries[i] == "Unknown":
+                continue
             for j in range(N):
-                if i != j and industries[i] != 'Unknown' and industries[i] == industries[j]:
+                if i != j and industries[i] == industries[j]:
                     R_industry[i, j] = 1.0
 
-        connection_count = R_industry.sum()
-        logger.info(f"Industry relation matrix: {connection_count:.0f} connections")
+        # Verify symmetry
+        assert np.allclose(R_industry, R_industry.T), "R_industry not symmetric — this is a bug"
 
+        density = (R_industry > 0).mean()
+        logger.info(f"R_industry | connections: {int(R_industry.sum()):,} | density: {density:.2%}")
         return R_industry
+
+    # ── 3. Correlation relation ───────────────────────────────────────────────
 
     def build_correlation_relation(self, stock_list: List[str]) -> np.ndarray:
         """
-        Build correlation relation matrix using TRAINING PERIOD ONLY.
+        Continuous symmetric matrix storing thresholded |correlation| values.
 
-        Args:
-            stock_list: Ordered list of stock symbols
+        Design decisions vs original:
+          - NOT row-normalized (normalization destroyed symmetry → BUG [1])
+          - Stores raw |corr| values so MRT can use graded attention weights
+          - Threshold lowered to 0.25 (BUG [2]: 0.4 was too sparse for India)
+          - Symmetry explicitly forced and asserted
 
         Returns:
-            N×N correlation matrix (thresholded and row-normalized)
+            (N, N) float32 matrix with values in [0, 1], symmetric, diagonal=0
         """
         N = len(stock_list)
-        logger.info(f"Building correlation matrix for {N} stocks (training period only)...")
+        logger.info(
+            f"Building R_corr for {N} stocks "
+            f"(training data only, threshold={self.corr_threshold}) ..."
+        )
 
-        # Load returns for all stocks (training period only)
-        returns_dict = {}
-
+        # ── Load close_ret for each stock, training period only ──────────────
+        returns_dict: Dict[str, Optional[pd.Series]] = {}
         for symbol in tqdm(stock_list, desc="Loading returns"):
-            features_path = self.processed_data_dir / f"{symbol}_features.parquet"
-
-            if not features_path.exists():
-                logger.warning(f"{symbol}: Features not found")
+            path = self.processed_data_dir / f"{symbol}_features.parquet"
+            if not path.exists():
+                logger.warning(f"{symbol}: features file not found")
                 returns_dict[symbol] = None
                 continue
 
-            df = pd.read_parquet(features_path)
-            df['Date'] = pd.to_datetime(df['Date'])
-
-            # Filter to training period ONLY
-            df_train = df[df['Date'] <= self.train_end_date].copy()
+            df = pd.read_parquet(path)
+            df["Date"] = pd.to_datetime(df["Date"])
+            df_train   = df[df["Date"] <= self.train_end_date].copy()
 
             if len(df_train) < 100:
-                logger.warning(f"{symbol}: Insufficient training data ({len(df_train)} days)")
+                logger.warning(f"{symbol}: only {len(df_train)} training days — skipping")
                 returns_dict[symbol] = None
                 continue
 
-            returns_dict[symbol] = df_train.set_index('Date')['close_ret']
+            returns_dict[symbol] = df_train.set_index("Date")["close_ret"]
 
-        # Create returns matrix (aligned dates)
+        # ── Align all valid stocks to common date index ───────────────────────
         valid_symbols = [s for s in stock_list if returns_dict[s] is not None]
+        n_excluded    = len(stock_list) - len(valid_symbols)
+        if n_excluded > 0:
+            logger.warning(f"{n_excluded} stocks excluded from correlation (missing data)")
 
-        if len(valid_symbols) < len(stock_list):
-            logger.warning(f"{len(stock_list) - len(valid_symbols)} stocks excluded due to missing data")
-
-        # Align all returns to common date index
         returns_df = pd.DataFrame({s: returns_dict[s] for s in valid_symbols})
-        returns_df = returns_df.dropna(how='all')  # Drop dates with all NaN
+        returns_df = returns_df.dropna(how="all")
+        logger.info(f"Correlation computed on {len(returns_df)} trading days")
 
-        logger.info(f"Computing correlation on {len(returns_df)} trading days")
+        # ── Compute correlation, force symmetry, threshold ────────────────────
+        corr_matrix = returns_df.corr().values                   # (M, M), M = |valid_symbols|
+        corr_matrix = np.nan_to_num(corr_matrix, nan=0.0)       # stocks with zero variance
 
-        # Compute correlation matrix
-        corr_matrix = returns_df.corr().values
+        # BUG FIX [1]: Explicitly force symmetry before thresholding.
+        # np.corrcoef is theoretically symmetric but floating-point rounding
+        # can break it; row-normalization in original code completely destroyed it.
+        corr_matrix = (corr_matrix + corr_matrix.T) / 2
+        np.fill_diagonal(corr_matrix, 0.0)                      # no self-loops
 
-        # Assert symmetry and no test leakage
-        assert np.allclose(corr_matrix, corr_matrix.T), "Correlation matrix not symmetric"
-        logger.info("Verified: Correlation matrix is symmetric")
+        # Threshold on absolute value; store |corr| for graded attention weights
+        abs_corr     = np.abs(corr_matrix)
+        R_corr_valid = np.where(abs_corr >= self.corr_threshold, abs_corr, 0.0).astype(np.float32)
 
-        # Threshold by absolute correlation
-        R_corr = np.abs(corr_matrix)
-        R_corr[R_corr < self.corr_threshold] = 0.0
+        # Assert symmetry on the final matrix
+        assert np.allclose(R_corr_valid, R_corr_valid.T, atol=1e-5), \
+            "R_corr not symmetric after fix — this is a bug"
 
-        # Set diagonal to 0 (no self-connections)
-        np.fill_diagonal(R_corr, 0.0)
+        density = (R_corr_valid != 0).mean()
+        logger.info(
+            f"R_corr (valid stocks) | connections: {int((R_corr_valid > 0).sum()):,} | "
+            f"density: {density:.2%}"
+        )
 
-        # Row-stochastic normalization
-        row_sums = R_corr.sum(axis=1, keepdims=True)
-        row_sums[row_sums == 0] = 1.0  # Avoid division by zero
-        R_corr = R_corr / row_sums
-
-        connection_count = (R_corr > 0).sum()
-        logger.info(f"Correlation relation matrix: {connection_count:.0f} connections")
-
-        # Map back to original stock_list with NaNs filled
+        # ── Map valid-stock matrix back to full stock_list ────────────────────
         R_corr_full = np.zeros((N, N), dtype=np.float32)
+        sym_to_vidx = {s: i for i, s in enumerate(valid_symbols)}
 
-        symbol_to_idx = {s: i for i, s in enumerate(valid_symbols)}
         for i, s1 in enumerate(stock_list):
             for j, s2 in enumerate(stock_list):
-                if s1 in symbol_to_idx and s2 in symbol_to_idx:
-                    idx1 = symbol_to_idx[s1]
-                    idx2 = symbol_to_idx[s2]
-                    R_corr_full[i, j] = R_corr[idx1, idx2]
+                if s1 in sym_to_vidx and s2 in sym_to_vidx:
+                    vi = sym_to_vidx[s1]
+                    vj = sym_to_vidx[s2]
+                    R_corr_full[i, j] = R_corr_valid[vi, vj]
 
+        # Final symmetry check on full matrix
+        assert np.allclose(R_corr_full, R_corr_full.T, atol=1e-5), \
+            "R_corr_full not symmetric after remapping — this is a bug"
+
+        full_density = (R_corr_full != 0).mean()
+        logger.info(f"R_corr     | density (full {N}×{N}): {full_density:.2%}")
         return R_corr_full
+
+    # ── 4. Combined mask ──────────────────────────────────────────────────────
 
     def build_combined_mask(
         self,
-        R_sector: np.ndarray,
+        R_sector:   np.ndarray,
         R_industry: np.ndarray,
-        R_corr: np.ndarray
+        R_corr:     np.ndarray,
+        stock_list: List[str],
     ) -> np.ndarray:
         """
-        Build combined attention mask (union of all relations).
+        Union of all three relation matrices → binary attention mask.
 
-        Args:
-            R_sector: Sector relation matrix
-            R_industry: Industry relation matrix
-            R_corr: Correlation relation matrix
+        Isolated stocks (no connections from any matrix) receive fallback
+        connections to all other stocks sharing the same sector. If a stock
+        has no sector info, it receives full attention (all stocks).
 
         Returns:
-            N×N boolean mask
+            (N, N) float32 binary mask
         """
-        # Union: any connection from any matrix
-        R_mask = (R_sector > 0) | (R_industry > 0) | (R_corr > 0)
+        N      = R_sector.shape[0]
+        R_mask = (R_sector > 0) | (R_industry > 0) | (R_corr != 0)
+        np.fill_diagonal(R_mask, False)   # no self-loops
 
-        # Handle isolated nodes (no connections)
-        isolated = R_mask.sum(axis=1) == 0
+        # ── Fallback for isolated stocks ──────────────────────────────────────
+        isolated_idx = np.where(R_mask.sum(axis=1) == 0)[0]
+        if len(isolated_idx) > 0:
+            logger.warning(
+                f"{len(isolated_idx)} isolated stocks — applying sector fallback"
+            )
+            sectors = [
+                self.metadata.get(s, {}).get("sector", "Unknown")
+                for s in stock_list
+            ]
+            for i in isolated_idx:
+                sector_i = sectors[i]
+                if sector_i == "Unknown":
+                    # No sector info: allow full attention
+                    R_mask[i, :] = True
+                    R_mask[:, i] = True
+                    logger.debug(f"  {stock_list[i]}: no sector → full attention")
+                else:
+                    # Connect to all sector peers (symmetric)
+                    for j in range(N):
+                        if i != j and sectors[j] == sector_i:
+                            R_mask[i, j] = True
+                            R_mask[j, i] = True
+                    logger.debug(
+                        f"  {stock_list[i]}: connected to {R_mask[i].sum()} sector peers"
+                    )
 
-        if isolated.any():
-            logger.warning(f"{isolated.sum()} stocks have no connections, allowing full attention")
-            R_mask[isolated, :] = True
+            np.fill_diagonal(R_mask, False)   # re-zero diagonal after fallback
 
-        connection_pct = R_mask.sum() / (R_mask.shape[0] ** 2)
-        logger.info(f"Combined mask: {connection_pct:.2%} of possible connections")
+        R_mask_f = R_mask.astype(np.float32)
+        density  = (R_mask_f > 0).mean()
 
-        return R_mask.astype(np.float32)
+        logger.info(f"R_mask     | density: {density:.2%}  (target: 25–35%)")
+        if density < TARGET_DENSITY_LOW:
+            logger.warning(
+                f"R_mask density {density:.2%} is below target {TARGET_DENSITY_LOW:.0%}. "
+                f"Consider lowering corr_threshold further."
+            )
+        elif density > TARGET_DENSITY_HIGH:
+            logger.warning(
+                f"R_mask density {density:.2%} exceeds target {TARGET_DENSITY_HIGH:.0%}. "
+                f"MRT attention may be under-constrained."
+            )
+
+        return R_mask_f
+
+    # ── Public API ────────────────────────────────────────────────────────────
 
     def build_all_relations(self, stock_list: List[str]) -> Dict[str, np.ndarray]:
         """
-        Build all relation matrices.
+        Build and validate all relation matrices.
 
         Args:
-            stock_list: Ordered list of stock symbols
+            stock_list: Ordered list of N stock symbols (must match dataset order)
 
         Returns:
-            Dict with all matrices
+            Dict with keys: R_sector, R_industry, R_corr, R_mask, stock_symbols
         """
-        logger.info(f"Building relation matrices for {len(stock_list)} stocks...")
+        logger.info(f"Building all relation matrices for {len(stock_list)} stocks ...")
 
-        # Build individual matrices
-        R_sector = self.build_sector_relation(stock_list)
+        R_sector   = self.build_sector_relation(stock_list)
         R_industry = self.build_industry_relation(stock_list)
-        R_corr = self.build_correlation_relation(stock_list)
+        R_corr     = self.build_correlation_relation(stock_list)
+        R_mask     = self.build_combined_mask(R_sector, R_industry, R_corr, stock_list)
 
-        # Build combined mask
-        R_mask = self.build_combined_mask(R_sector, R_industry, R_corr)
+        # ── Final validation pass ─────────────────────────────────────────────
+        for name, mat in [("R_sector",   R_sector),
+                          ("R_industry", R_industry),
+                          ("R_corr",     R_corr),
+                          ("R_mask",     R_mask)]:
+            assert mat.shape == (len(stock_list), len(stock_list)), \
+                f"{name} has wrong shape {mat.shape}"
+            assert np.allclose(mat, mat.T, atol=1e-5), \
+                f"{name} is not symmetric — this is a bug"
+            assert mat.diagonal().sum() == 0, \
+                f"{name} has non-zero diagonal — this is a bug"
+
+        logger.info("All relation matrices validated ✓")
 
         return {
-            'R_sector': R_sector,
-            'R_industry': R_industry,
-            'R_corr': R_corr,
-            'R_mask': R_mask,
-            'stock_symbols': np.array(stock_list)
+            "R_sector":      R_sector,
+            "R_industry":    R_industry,
+            "R_corr":        R_corr,
+            "R_mask":        R_mask,
+            "stock_symbols": np.array(stock_list),
         }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Entry point
+# ─────────────────────────────────────────────────────────────────────────────
+
 def build_relation_matrices(
-    config: Dict,
-    stock_list: List[str],
-    output_path: Path
+    config:      Dict,
+    stock_list:  List[str],
+    output_path: Path,
 ) -> Dict[str, np.ndarray]:
     """
-    Entry point for relation matrix building.
+    Entry point called by the data pipeline.
 
     Args:
-        config: Configuration dictionary
-        stock_list: List of stock symbols
-        output_path: Path to save relation matrices
+        config:      Full config dict (loads paths, data, training sections)
+        stock_list:  Ordered list of stock symbols matching nifty500_10yr.npz
+        output_path: Destination for relation_matrices.npz
 
     Returns:
         Dict with all relation matrices
     """
-    root = Path(config['paths']['root'])
+    root = Path(config["paths"]["root"])
 
     builder = RelationBuilder(
-        processed_data_dir=root / config['paths']['processed_data'],
-        metadata_path=root / config['paths']['raw_data'] / 'metadata.json',
-        corr_threshold=config['data']['corr_threshold'],
-        train_end_date=config['training']['train_end']
+        processed_data_dir = root / config["paths"]["processed_data"],
+        metadata_path      = root / config["paths"]["raw_data"] / "metadata.json",
+        corr_threshold     = config["data"]["corr_threshold"],      # 0.25
+        train_end_date     = config["training"]["train_end"],        # "2022-12-31"
     )
 
     matrices = builder.build_all_relations(stock_list)
 
-    # Save
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(output_path, **matrices)
-    logger.info(f"Relation matrices saved to {output_path}")
+    logger.info(f"Relation matrices saved → {output_path}")
 
     return matrices
