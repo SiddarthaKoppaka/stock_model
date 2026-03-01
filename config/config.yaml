@@ -21,25 +21,25 @@ data:
   nifty_index_threshold: 0.05
 
 model:
-  d_model: 128
-  n_heads_mrt: 8
-  n_layers_dicem: 4
-  n_layers_mrt: 3
-  diffusion_T: 200
-  beta_start: 0.00001
-  beta_end: 0.01
-  dropout: 0.15
+  d_model: 192               # Increased from 128 for more capacity
+  n_heads_mrt: 12            # Increased from 8
+  n_layers_dicem: 5          # Increased from 4
+  n_layers_mrt: 4            # Increased from 3
+  diffusion_T: 150           # Reduced from 200 for faster training
+  beta_start: 0.0001         # Increased from 0.00001
+  beta_end: 0.015            # Increased from 0.01
+  dropout: 0.18              # Slightly increased from 0.15
 
 training:
-  batch_size: 32
-  learning_rate: 0.00003
-  weight_decay: 0.001
-  max_epochs: 150
-  patience: 20
-  grad_clip: 0.5
+  batch_size: 24             # Reduced from 32 for better gradients
+  learning_rate: 0.0001      # INCREASED 3.3x from 0.00003 - key fix
+  weight_decay: 0.005        # Increased from 0.001
+  max_epochs: 200            # Increased from 150
+  patience: 25               # Increased from 20
+  grad_clip: 0.8             # Increased from 0.5
   ema_decay: 0.995
-  warmup_steps: 500
-  noise_augmentation: 0.01
+  warmup_steps: 800          # Increased from 500
+  noise_augmentation: 0.015  # Increased from 0.01
 
   # Train/val/test split dates
   train_end: "2022-12-31"
