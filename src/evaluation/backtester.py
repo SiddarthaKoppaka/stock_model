@@ -91,114 +91,48 @@ class IndianMarketBacktester:
 
         return total
 
-    def run_topk_strategy(
-        self,
-        K: int = 20,
-        rebalance_freq: str = 'weekly',
-        return_daily_positions: bool = False
-    ) -> Dict:
-        """
-        Run long-only Top-K strategy.
-
-        Each rebalance period:
-        1. Select top K stocks by predicted return
-        2. Equally weight portfolio
-        3. Compute returns after transaction costs
-
-        Args:
-            K: Number of stocks to hold
-            rebalance_freq: 'daily' or 'weekly'
-            return_daily_positions: Whether to return daily position data
-
-        Returns:
-            Dict with backtest results
-        """
+    def run_topk_strategy(self, K=20, rebalance_freq='weekly', return_daily_positions=False):
         T, N = self.predictions.shape
 
-        # Initialize tracking
         portfolio_value = np.zeros(T)
         portfolio_value[0] = self.initial_capital
+        daily_returns   = np.zeros(T)
+        turnover        = np.zeros(T)
 
-        daily_returns = np.zeros(T)
-        turnover = np.zeros(T)
+        # Track positions as weights (0 to 1), not absolute ₹
+        current_weights = np.zeros(N)
 
-        current_positions = np.zeros(N)  # Number of shares held
-
-        # Rebalance schedule
-        if rebalance_freq == 'weekly':
-            # Rebalance every Monday (or first trading day of week)
-            rebalance_days = self._get_weekly_rebalance_days()
-        else:
-            rebalance_days = set(range(T))  # Rebalance every day
-
-        daily_position_data = [] if return_daily_positions else None
+        rebalance_days = self._get_weekly_rebalance_days() if rebalance_freq == 'weekly' else set(range(T))
 
         for t in range(1, T):
-            # Check if rebalance day
+            # ── step 1: apply yesterday's returns to get today's value ──────────
+            held = current_weights > 0
+            if held.any():
+                stock_rets     = np.nan_to_num(self.actuals[t, :], nan=0.0)
+                portfolio_ret  = np.dot(current_weights, stock_rets)
+                daily_returns[t]   = portfolio_ret
+                portfolio_value[t] = portfolio_value[t-1] * (1 + portfolio_ret)
+            else:
+                portfolio_value[t] = portfolio_value[t-1]
+
+            # ── step 2: rebalance if scheduled ──────────────────────────────────
             if t in rebalance_days:
-                # Get top K stocks
-                top_k_indices = self._get_top_k_stocks(t - 1, K)
+                top_k = self._get_top_k_stocks(t-1, K)   # use yesterday's predictions
 
-                # Calculate target positions (equal weight)
-                target_positions = np.zeros(N)
-                target_value_per_stock = portfolio_value[t - 1] / K
+                target_weights = np.zeros(N)
+                target_weights[top_k] = 1.0 / K           # equal weight
 
-                for idx in top_k_indices:
-                    # Assume stock price = 1 (we're working in returns space)
-                    # In practice, would use actual prices
-                    target_positions[idx] = target_value_per_stock
+                # Turnover = sum of absolute weight changes
+                to = np.sum(np.abs(target_weights - current_weights))
+                turnover[t] = to
 
-                # Calculate turnover
-                turnover_value = np.sum(np.abs(target_positions - current_positions))
-                turnover[t] = turnover_value / portfolio_value[t - 1]
+                # Transaction cost on turned-over fraction
+                cost = to * self.total_cost_pct
+                portfolio_value[t] *= (1 - cost)
 
-                # Apply transaction costs
-                transaction_cost = turnover_value * self.total_cost_pct
-                portfolio_value[t] = portfolio_value[t - 1] - transaction_cost
+                current_weights = target_weights
 
-                # Update positions
-                current_positions = target_positions
-            else:
-                # No rebalance, carry forward value minus costs
-                portfolio_value[t] = portfolio_value[t - 1]
-
-            # Apply returns for held stocks
-            if np.sum(current_positions > 0) > 0:
-                # Get actual returns for held stocks
-                held_stocks = current_positions > 0
-                held_returns = self.actuals[t, held_stocks]
-
-                # Remove NaN returns (replace with 0)
-                held_returns = np.nan_to_num(held_returns, nan=0.0)
-
-                # Weighted return (equal weight)
-                portfolio_return = np.mean(held_returns)
-
-                # Apply return
-                portfolio_value[t] = portfolio_value[t] * (1 + portfolio_return)
-                daily_returns[t] = portfolio_return
-            else:
-                daily_returns[t] = 0.0
-
-            # Store position data
-            if return_daily_positions:
-                daily_position_data.append({
-                    'date': self.dates[t],
-                    'value': portfolio_value[t],
-                    'positions': current_positions.copy(),
-                    'return': daily_returns[t]
-                })
-
-        # Calculate metrics
-        results = self._calculate_backtest_metrics(
-            portfolio_value,
-            daily_returns,
-            turnover
-        )
-
-        if return_daily_positions:
-            results['daily_positions'] = daily_position_data
-
+        results = self._calculate_backtest_metrics(portfolio_value, daily_returns, turnover)
         return results
 
     def _get_weekly_rebalance_days(self) -> set:
