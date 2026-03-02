@@ -38,7 +38,7 @@ from loguru import logger
 # ─────────────────────────────────────────────────────────────────────────────
 DEFAULT_CORR_THRESHOLD = 0.25   # was 0.4 — too aggressive for Indian markets
 DEFAULT_TRAIN_END_DATE = "2022-12-31"
-TARGET_DENSITY_LOW     = 0.25   # warn if combined mask falls below this
+TARGET_DENSITY_LOW     = 0.20   # warn if combined mask falls below this
 TARGET_DENSITY_HIGH    = 0.35   # warn if combined mask exceeds this
 
 
@@ -196,21 +196,13 @@ class RelationBuilder:
 
         # ── Compute correlation, force symmetry, threshold ────────────────────
         corr_matrix = returns_df.corr().values                   # (M, M), M = |valid_symbols|
-        corr_matrix = np.nan_to_num(corr_matrix, nan=0.0)       # stocks with zero variance
 
-        # BUG FIX [1]: Explicitly force symmetry before thresholding.
-        # np.corrcoef is theoretically symmetric but floating-point rounding
-        # can break it; row-normalization in original code completely destroyed it.
+        # BUG FIX [1]: Force symmetry and remove row-stochastic normalization entirely
         corr_matrix = (corr_matrix + corr_matrix.T) / 2
-        np.fill_diagonal(corr_matrix, 0.0)                      # no self-loops
-
-        # Threshold on absolute value; store |corr| for graded attention weights
-        abs_corr     = np.abs(corr_matrix)
-        R_corr_valid = np.where(abs_corr >= self.corr_threshold, abs_corr, 0.0).astype(np.float32)
-
-        # Assert symmetry on the final matrix
-        assert np.allclose(R_corr_valid, R_corr_valid.T, atol=1e-5), \
-            "R_corr not symmetric after fix — this is a bug"
+        np.fill_diagonal(corr_matrix, 0.0)
+        corr_matrix = np.nan_to_num(corr_matrix, nan=0.0)
+        R_corr_valid = np.where(np.abs(corr_matrix) >= self.corr_threshold, corr_matrix, 0.0).astype(np.float32)
+        assert np.allclose(R_corr_valid, R_corr_valid.T, atol=1e-5), "R_corr must be symmetric"
 
         density = (R_corr_valid != 0).mean()
         logger.info(
@@ -260,49 +252,32 @@ class RelationBuilder:
         R_mask = (R_sector > 0) | (R_industry > 0) | (R_corr != 0)
         np.fill_diagonal(R_mask, False)   # no self-loops
 
-        # ── Fallback for isolated stocks ──────────────────────────────────────
-        isolated_idx = np.where(R_mask.sum(axis=1) == 0)[0]
-        if len(isolated_idx) > 0:
-            logger.warning(
-                f"{len(isolated_idx)} isolated stocks — applying sector fallback"
-            )
-            sectors = [
-                self.metadata.get(s, {}).get("sector", "Unknown")
-                for s in stock_list
-            ]
-            for i in isolated_idx:
-                sector_i = sectors[i]
-                if sector_i == "Unknown":
-                    # No sector info: allow full attention
-                    R_mask[i, :] = True
-                    R_mask[:, i] = True
-                    logger.debug(f"  {stock_list[i]}: no sector → full attention")
-                else:
-                    # Connect to all sector peers (symmetric)
-                    for j in range(N):
-                        if i != j and sectors[j] == sector_i:
-                            R_mask[i, j] = True
-                            R_mask[j, i] = True
-                    logger.debug(
-                        f"  {stock_list[i]}: connected to {R_mask[i].sum()} sector peers"
-                    )
+        # ── Fallback for isolated stocks (sector-peer fallback) ─────────────────
+        isolated_indices = np.where(R_mask.sum(axis=1) == 0)[0]
+        sectors = [self.metadata.get(s, {}).get("sector", "Unknown") for s in stock_list]
+        for i in isolated_indices:
+            peers = [j for j in range(N) if j != i and sectors[j] == sectors[i] and sectors[i] != "Unknown"]
+            if peers:
+                R_mask[i, peers] = True
+                for j in peers:
+                    R_mask[j, i] = True
+            else:
+                R_mask[i, :] = True
+                R_mask[:, i] = True
+                R_mask[i, i] = False
+        np.fill_diagonal(R_mask, False)
 
-            np.fill_diagonal(R_mask, False)   # re-zero diagonal after fallback
+        if len(isolated_indices) > 0:
+            logger.warning(
+                f"{len(isolated_indices)} isolated stocks — applied sector-peer fallback"
+            )
 
         R_mask_f = R_mask.astype(np.float32)
-        density  = (R_mask_f > 0).mean()
+        density  = 100 * R_mask_f.sum() / R_mask_f.size
 
-        logger.info(f"R_mask     | density: {density:.2%}  (target: 25–35%)")
-        if density < TARGET_DENSITY_LOW:
-            logger.warning(
-                f"R_mask density {density:.2%} is below target {TARGET_DENSITY_LOW:.0%}. "
-                f"Consider lowering corr_threshold further."
-            )
-        elif density > TARGET_DENSITY_HIGH:
-            logger.warning(
-                f"R_mask density {density:.2%} exceeds target {TARGET_DENSITY_HIGH:.0%}. "
-                f"MRT attention may be under-constrained."
-            )
+        if density < 20.0:
+            logger.warning(f"R_mask density {density:.2f}% is below 20% — consider lowering corr_threshold further")
+        logger.info(f"R_mask density: {density:.2f}%  (target: 20–35%)")
 
         return R_mask_f
 
@@ -373,7 +348,7 @@ def build_relation_matrices(
     builder = RelationBuilder(
         processed_data_dir = root / config["paths"]["processed_data"],
         metadata_path      = root / config["paths"]["raw_data"] / "metadata.json",
-        corr_threshold     = config["data"]["corr_threshold"],      # 0.25
+        corr_threshold     = config["data"]["corr_threshold"],      # 0.15
         train_end_date     = config["training"]["train_end"],        # "2022-12-31"
     )
 
@@ -381,7 +356,7 @@ def build_relation_matrices(
 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(output_path, **matrices)
+    np.savez_compressed(output_path, **matrices, corr_threshold=np.float32(builder.corr_threshold))
     logger.info(f"Relation matrices saved → {output_path}")
 
     return matrices

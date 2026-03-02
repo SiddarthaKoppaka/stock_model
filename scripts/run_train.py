@@ -77,12 +77,24 @@ def main():
     print(f"Val samples: {len(X_val)}")
     print(f"Stocks: {len(stock_symbols)}")
 
-    # Load relation mask
+    # Load verified relation matrices (rebuilt with corr_threshold=0.25)
     relation_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'relation_matrices.npz'
-    relations = np.load(relation_path)
-    R_mask = torch.FloatTensor(relations['R_mask'])
+    rel = np.load(relation_path)
 
-    print(f"Relation mask density: {R_mask.mean():.2%}")
+    # Sanity checks before training
+    R_mask_np = rel['R_mask']
+    n_stocks = len(stock_symbols)
+    density = float((R_mask_np > 0).mean()) * 100
+    threshold = float(rel['corr_threshold'])
+
+    assert R_mask_np.shape == (n_stocks, n_stocks), f"R_mask shape mismatch: {R_mask_np.shape} vs expected ({n_stocks}, {n_stocks})"
+    assert np.allclose(R_mask_np, R_mask_np.T, atol=1e-5), "R_mask is not symmetric!"
+    assert 20 < density < 40, f"R_mask density {density:.1f}% outside expected 20–40% range"
+    assert abs(threshold - 0.25) < 1e-4, f"corr_threshold={threshold} — expected 0.25"
+
+    print(f"R_mask loaded | density={density:.2f}%  threshold={threshold}")
+
+    R_mask = torch.tensor(R_mask_np, dtype=torch.float32)  # (N, N), float32 {0,1}
 
     # Create model
     n_stocks = len(stock_symbols)

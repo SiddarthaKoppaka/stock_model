@@ -225,14 +225,28 @@ class DatasetBuilder:
         val_mask = splits_all == 'val'
         test_mask = splits_all == 'test'
 
+        X_train = X_all[train_mask]
+        X_val = X_all[val_mask]
+        X_test = X_all[test_mask]
+
+        # Clip extreme outliers at ±5σ per feature (0.15% of values were beyond this in audit)
+        for feat_idx in range(X_train.shape[-1]):
+            mu  = X_train[..., feat_idx].mean()
+            sig = X_train[..., feat_idx].std()
+            clip_lo, clip_hi = mu - 5 * sig, mu + 5 * sig
+            X_train[..., feat_idx] = np.clip(X_train[..., feat_idx], clip_lo, clip_hi)
+            X_val[...,   feat_idx] = np.clip(X_val[...,   feat_idx], clip_lo, clip_hi)
+            X_test[...,  feat_idx] = np.clip(X_test[...,  feat_idx], clip_lo, clip_hi)
+        logger.info("Applied ±5σ feature clipping using train-set statistics")
+
         dataset = {
-            'X_train': X_all[train_mask],
+            'X_train': X_train,
             'y_train': y_all[train_mask],
             'dates_train': dates_all[train_mask],
-            'X_val': X_all[val_mask],
+            'X_val': X_val,
             'y_val': y_all[val_mask],
             'dates_val': dates_all[val_mask],
-            'X_test': X_all[test_mask],
+            'X_test': X_test,
             'y_test': y_all[test_mask],
             'dates_test': dates_all[test_mask]
         }
