@@ -44,12 +44,18 @@ class SinusoidalTimeEmbedding(nn.Module):
 
 class DenoisingNetwork(nn.Module):
     """
-    MLP-based denoising network with time and condition injection.
+    Per-stock denoising network with time and condition injection.
 
-    Predicts noise given:
-        - Noisy returns x_t
-        - Timestep t
-        - Conditional embeddings from MaTCHS
+    Processes each stock independently using its MaTCHS embedding as conditioning.
+    This preserves per-stock structure rather than flattening all stocks together.
+
+    Input:
+        x_t:       (B, N)        — noisy returns at timestep t
+        t:         (B,)          — timestep indices
+        condition: (B, N, d_model) — per-stock embeddings from MaTCHS
+
+    Output:
+        (B, N) — predicted noise per stock
     """
 
     def __init__(
@@ -57,44 +63,38 @@ class DenoisingNetwork(nn.Module):
         n_stocks: int,
         d_model: int,
         time_embed_dim: int = 128,
-        hidden_dims: list = [1024, 512, 256]
+        hidden_dim: int = 256
     ):
         """
         Args:
             n_stocks: Number of stocks (N)
             d_model: Dimension of conditional embeddings
             time_embed_dim: Dimension of time embeddings
-            hidden_dims: List of hidden layer dimensions
+            hidden_dim: Hidden layer dimension for per-stock MLP
         """
         super().__init__()
-
         self.n_stocks = n_stocks
         self.d_model = d_model
 
         # Time embedding
         self.time_embed = SinusoidalTimeEmbedding(time_embed_dim)
+        self.time_proj = nn.Linear(time_embed_dim, hidden_dim)
 
-        # Condition embedding projection (from MaTCHS)
-        # Condition is (B, N, d_model), we'll flatten to (B, N*d_model)
-        self.cond_proj = nn.Linear(n_stocks * d_model, hidden_dims[0])
+        # Per-stock input projection: x_t[i] scalar + condition[i] d_model vector
+        self.input_proj = nn.Linear(1 + d_model, hidden_dim)
 
-        # Input projection (x_t + t_embed)
-        input_dim = n_stocks + time_embed_dim
-        self.input_proj = nn.Linear(input_dim, hidden_dims[0])
+        # Shared MLP applied independently to each stock
+        self.mlp = nn.Sequential(
+            nn.SiLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.SiLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.SiLU(),
+        )
 
-        # MLP layers
-        layers = []
-        for i in range(len(hidden_dims) - 1):
-            layers.extend([
-                nn.Linear(hidden_dims[i], hidden_dims[i+1]),
-                nn.SiLU(),
-                nn.Dropout(0.1)
-            ])
-
-        self.mlp = nn.Sequential(*layers)
-
-        # Output projection (predict noise)
-        self.output_proj = nn.Linear(hidden_dims[-1], n_stocks)
+        # Output: scalar noise prediction per stock
+        self.output_proj = nn.Linear(hidden_dim // 2, 1)
 
     def forward(
         self,
@@ -115,25 +115,23 @@ class DenoisingNetwork(nn.Module):
         """
         B, N = x_t.shape
 
-        # Time embedding
-        t_embed = self.time_embed(t)  # (B, time_embed_dim)
+        # Time embedding broadcast across all stocks
+        t_embed = self.time_proj(self.time_embed(t))         # (B, hidden_dim)
+        t_embed = t_embed.unsqueeze(1).expand(B, N, -1)      # (B, N, hidden_dim)
 
-        # Condition embedding (flatten and project)
-        cond = condition.view(B, -1)  # (B, N * d_model)
-        cond = self.cond_proj(cond)  # (B, hidden_dim)
+        # Per-stock input: concat noisy return scalar with stock embedding
+        x_stock = x_t.unsqueeze(-1)                           # (B, N, 1)
+        stock_input = torch.cat([x_stock, condition], dim=-1) # (B, N, 1 + d_model)
+        h = self.input_proj(stock_input)                      # (B, N, hidden_dim)
 
-        # Concatenate x_t and time embedding
-        x_input = torch.cat([x_t, t_embed], dim=-1)  # (B, N + time_embed_dim)
-        x_input = self.input_proj(x_input)  # (B, hidden_dim)
+        # Add time conditioning
+        h = h + t_embed                                       # (B, N, hidden_dim)
 
-        # Combine with condition
-        h = x_input + cond  # (B, hidden_dim)
+        # Shared MLP applied per stock (batch and stock dims treated as batch)
+        h = self.mlp(h)                                       # (B, N, hidden_dim // 2)
 
-        # MLP
-        h = self.mlp(h)  # (B, hidden_dim[-1])
-
-        # Predict noise
-        noise_pred = self.output_proj(h)  # (B, N)
+        # Predict noise scalar per stock
+        noise_pred = self.output_proj(h).squeeze(-1)          # (B, N)
 
         return noise_pred
 
