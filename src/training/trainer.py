@@ -17,6 +17,8 @@ import numpy as np
 from pathlib import Path
 from typing import Dict, Tuple
 import json
+import shutil
+import os
 from tqdm import tqdm
 from loguru import logger
 
@@ -307,9 +309,18 @@ class DiffSTOCKTrainer:
                     self.best_val_ic = val_metrics['IC']
                     self.epochs_without_improvement = 0
 
-                    # Save best model
+                    # Save best model locally
                     self.save_checkpoint('best_model.pt')
                     logger.info(f"  New best model saved! IC: {self.best_val_ic:.4f}")
+
+                    # Copy to Google Drive (for Colab persistence)
+                    drive_ckpt = '/content/drive/MyDrive/DiffSTOCK_Outputs/checkpoints'
+                    if os.path.exists('/content/drive'):
+                        os.makedirs(drive_ckpt, exist_ok=True)
+                        local_ckpt = str(self.checkpoint_dir / 'best_model.pt')
+                        shutil.copy(local_ckpt, f'{drive_ckpt}/best_model_epoch{epoch}_ic{val_metrics["IC"]:.4f}.pt')
+                        shutil.copy(local_ckpt, f'{drive_ckpt}/best_model.pt')
+                        logger.info(f"  Checkpoint copied to Drive")
                 else:
                     self.epochs_without_improvement += report_every
 

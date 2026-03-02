@@ -174,9 +174,14 @@ class DatasetBuilder:
         date_samples = []
         split_labels = []  # 'train', 'val', or 'test'
 
-        for t in range(L, T - H):             # remove the +1 to preserve valid indexing
+        for t in range(L, T - H):             # ensure H days of forward returns available
             X = feature_tensor[t-L:t, :, :]   # (L, N, F) — window ends at t-1
-            y = target_tensor[t, :]            # (N,)       — label is day t (next day after window)
+
+            # Multi-horizon label: H-day compounded forward return
+            # target_tensor[t:t+H, :] contains daily returns for days t, t+1, ..., t+H-1
+            forward_rets = target_tensor[t:t+H, :]  # (H, N)
+            y = (1 + forward_rets).prod(axis=0) - 1  # (N,) compounded H-day return
+
             if np.isnan(X).mean() > 0.5 or np.isnan(y).mean() > 0.5:
                 continue
             current_date = date_index[t-1] 
@@ -370,7 +375,7 @@ def build_dataset(config_path: str = None, run_scraping: bool = False) -> str:
     builder = DatasetBuilder(
         config=config,
         lookback_window=config['data']['lookback_window'],
-        prediction_horizon=1
+        prediction_horizon=config['data'].get('label_horizon', 5)  # default 5-day horizon
     )
 
     dataset_path = builder.build_full_dataset(run_scraping=run_scraping)

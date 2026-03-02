@@ -6,6 +6,8 @@ data:
   end_date: "2026-02-26"
   lookback_window: 20
   n_features: 16
+  label_horizon: 5           # predict 5-day (weekly) forward return
+  rebalance_freq: weekly     # for consistency
   corr_threshold: 0.25       # was 0.4
   nifty500_url: "https://archives.nseindia.com/content/indices/ind_nifty500list.csv"
 

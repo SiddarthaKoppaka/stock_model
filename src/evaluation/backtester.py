@@ -91,7 +91,21 @@ class IndianMarketBacktester:
 
         return total
 
-    def run_topk_strategy(self, K=20, rebalance_freq='weekly', return_daily_positions=False):
+    def run_topk_strategy(self, K=20, rebalance_freq='weekly', return_daily_positions=False, hold_multiplier=3):
+        """
+        Run long-only Top-K strategy with buy/hold spread banding.
+
+        Buy/Hold spread reduces turnover:
+        - BUY threshold: stock must rank in top K to enter portfolio
+        - HOLD threshold: stock can stay until it falls out of top (K * hold_multiplier)
+        - Only buy new stocks to fill slots vacated by stocks that fell below hold threshold
+
+        Args:
+            K: Number of stocks to hold (buy threshold)
+            rebalance_freq: 'daily' or 'weekly'
+            return_daily_positions: Unused (kept for API compatibility)
+            hold_multiplier: Multiplier for hold band (default 3x = top 60 for K=20)
+        """
         T, N = self.predictions.shape
 
         portfolio_value = np.zeros(T)
@@ -101,6 +115,10 @@ class IndianMarketBacktester:
 
         # Track positions as weights (0 to 1), not absolute ₹
         current_weights = np.zeros(N)
+
+        # Buy/hold thresholds
+        buy_k  = K                      # top 20 to enter
+        hold_k = K * hold_multiplier    # top 60 to stay (3x band)
 
         rebalance_days = self._get_weekly_rebalance_days() if rebalance_freq == 'weekly' else set(range(T))
 
@@ -115,12 +133,46 @@ class IndianMarketBacktester:
             else:
                 portfolio_value[t] = portfolio_value[t-1]
 
-            # ── step 2: rebalance if scheduled ──────────────────────────────────
+            # ── step 2: rebalance if scheduled (with buy/hold spread) ───────────
             if t in rebalance_days:
-                top_k = self._get_top_k_stocks(t-1, K)   # use yesterday's predictions
+                # Get rankings
+                top_buy  = set(self._get_top_k_stocks(t-1, buy_k))   # top K to buy
+                top_hold = set(self._get_top_k_stocks(t-1, hold_k))  # top K*3 to hold
 
+                # Current holdings
+                currently_held = set(np.where(current_weights > 0)[0])
+
+                # Exits: stocks in currently_held that fell below hold threshold
+                exits = currently_held - top_hold
+
+                # Stocks that remain (still in hold band)
+                remaining = currently_held - exits
+
+                # Available slots to fill
+                slots_available = K - len(remaining)
+
+                # Candidates: stocks in top buy_k NOT already held
+                candidates = top_buy - currently_held
+
+                # Sort candidates by prediction (highest first) and take slots_available
+                if slots_available > 0 and len(candidates) > 0:
+                    preds = self.predictions[t-1]
+                    candidate_list = list(candidates)
+                    candidate_preds = [preds[i] for i in candidate_list]
+                    sorted_candidates = [x for _, x in sorted(zip(candidate_preds, candidate_list), reverse=True)]
+                    entries = set(sorted_candidates[:slots_available])
+                else:
+                    entries = set()
+
+                # New portfolio = remaining + entries
+                new_portfolio = remaining | entries
+
+                # Build target weights
                 target_weights = np.zeros(N)
-                target_weights[top_k] = 1.0 / K           # equal weight
+                if len(new_portfolio) > 0:
+                    weight = 1.0 / len(new_portfolio)
+                    for idx in new_portfolio:
+                        target_weights[idx] = weight
 
                 # Turnover = sum of absolute weight changes
                 to = np.sum(np.abs(target_weights - current_weights))
