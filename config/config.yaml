@@ -23,27 +23,27 @@ data:
   nifty_index_threshold: 0.05
 
 model:
-  d_model: 96                # was 192 — too large for 637K samples
-  n_heads_mrt: 8             # was 12 — must divide d_model evenly (96/8=12 ✅)
-  n_layers_dicem: 4          # was 5
-  n_layers_mrt: 2            # was 4
-  diffusion_T: 100           # was 150
-  beta_start: 0.0001         # Increased from 0.00001
-  beta_end: 0.015            # Increased from 0.01
-  dropout: 0.30              # was 0.18 — higher dropout needed for smaller model
+  d_model: 192               # was 96 — restore original capacity
+  n_heads_mrt: 12            # was 8 — (192/12=16 ✅)
+  n_layers_dicem: 5          # was 4
+  n_layers_mrt: 3            # was 2 — deeper relational reasoning
+  diffusion_T: 150           # was 100
+  beta_start: 0.0001
+  beta_end: 0.02             # was 0.015 — slightly wider noise range
+  dropout: 0.15              # was 0.30 — reduce regularization, model needs capacity
 
 training:
   batch_size: 16
-  learning_rate: 0.0001      # INCREASED 3.3x from 0.00003 - key fix
-  weight_decay: 0.01
+  learning_rate: 0.0003      # was 0.0001 — 3x higher, plateau suggests LR too low
+  weight_decay: 0.005        # was 0.01 — less L2, let model fit more freely
   drop_extreme_label_pct: 0.025
   use_cs_zscore_labels: true
-  max_epochs: 200            # Increased from 150
-  patience: 25               # Increased from 20
-  grad_clip: 0.8             # Increased from 0.5
-  ema_decay: 0.995
-  warmup_steps: 800          # Increased from 500
-  noise_augmentation: 0.015  # Increased from 0.01
+  max_epochs: 250            # was 200 — plateau hit at 105, give more room
+  patience: 40               # was 25 — don't stop early, 5-day IC is noisier
+  grad_clip: 1.0             # was 0.8
+  ema_decay: 0.999           # was 0.995 — smoother EMA for noisier 5-day labels
+  warmup_steps: 1200         # was 800 — longer warmup for higher LR
+  noise_augmentation: 0.02   # was 0.015
 
   # Train/val/test split dates
   train_end: "2022-12-31"
