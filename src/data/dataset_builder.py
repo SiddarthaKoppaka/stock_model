@@ -174,18 +174,12 @@ class DatasetBuilder:
         date_samples = []
         split_labels = []  # 'train', 'val', or 'test'
 
-        for t in range(L, T - H + 1):
-            # Input window: [t-L:t]
-            X = feature_tensor[t-L:t, :, :]  # (L, N, F)
-
-            # Target: t (next day's return)
-            y = target_tensor[t, :]  # (N,)
-
-            # Skip if too many NaNs in input or target
+        for t in range(L, T - H):             # remove the +1 to preserve valid indexing
+            X = feature_tensor[t-L:t, :, :]   # (L, N, F) — window ends at t-1
+            y = target_tensor[t, :]            # (N,)       — label is day t (next day after window)
             if np.isnan(X).mean() > 0.5 or np.isnan(y).mean() > 0.5:
                 continue
-
-            current_date = date_index[t]
+            current_date = date_index[t-1] 
 
             # Determine split
             if current_date <= train_end:
