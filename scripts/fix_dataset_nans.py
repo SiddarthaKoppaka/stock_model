@@ -6,7 +6,7 @@ from pathlib import Path
 
 def fix_dataset_nans():
     """Replace NaN values in dataset with 0."""
-    dataset_path = Path('data/dataset/nifty500_10yr.npz')
+    dataset_path = Path('data/dataset/nifty500_20yr.npz')
 
     print(f"Loading dataset from {dataset_path}...")
     data = np.load(dataset_path, allow_pickle=True)

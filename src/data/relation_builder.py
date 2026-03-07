@@ -337,7 +337,7 @@ def build_relation_matrices(
 
     Args:
         config:      Full config dict (loads paths, data, training sections)
-        stock_list:  Ordered list of stock symbols matching nifty500_10yr.npz
+        stock_list:  Ordered list of stock symbols matching nifty500_20yr.npz
         output_path: Destination for relation_matrices.npz
 
     Returns:

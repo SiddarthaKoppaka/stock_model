@@ -60,7 +60,7 @@ def main():
     print("=" * 80)
 
     # Load dataset
-    dataset_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'nifty500_10yr.npz'
+    dataset_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'nifty500_20yr.npz'
     data = np.load(dataset_path, allow_pickle=True)
 
     if args.split == 'test':

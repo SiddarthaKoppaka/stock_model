@@ -1,0 +1,95 @@
+{
+  "timestamp": "20260302_235104",
+  "device": "cuda",
+  "best_val_ic": 0.30412056228457623,
+  "total_epochs": 124,
+  "config": {
+    "data": {
+      "start_date": "2015-01-01",
+      "end_date": "2026-02-26",
+      "lookback_window": 20,
+      "n_features": 16,
+      "label_horizon": 5,
+      "rebalance_freq": "weekly",
+      "corr_threshold": 0.25,
+      "nifty500_url": "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
+      "max_missing_pct": 0.15,
+      "min_trading_days": 500,
+      "max_zero_volume_pct": 0.1,
+      "min_adv_crores": 5.0,
+      "max_ffill_days": 5,
+      "outlier_threshold": 0.2,
+      "nifty_index_threshold": 0.05
+    },
+    "model": {
+      "d_model": 192,
+      "n_heads_mrt": 12,
+      "n_layers_dicem": 5,
+      "n_layers_mrt": 3,
+      "diffusion_T": 150,
+      "beta_start": 0.0001,
+      "beta_end": 0.02,
+      "dropout": 0.15
+    },
+    "training": {
+      "batch_size": 16,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.005,
+      "drop_extreme_label_pct": 0.025,
+      "use_cs_zscore_labels": true,
+      "max_epochs": 250,
+      "patience": 40,
+      "grad_clip": 1.0,
+      "ema_decay": 0.999,
+      "warmup_steps": 1200,
+      "noise_augmentation": 0.02,
+      "train_end": "2022-12-31",
+      "val_start": "2023-01-01",
+      "val_end": "2024-06-30",
+      "test_start": "2024-07-01"
+    },
+    "evaluation": {
+      "primary_metric": "IC",
+      "report_every": 5,
+      "top_k": 20,
+      "rebalance_freq": "weekly",
+      "risk_free_rate": 0.065,
+      "transaction_costs": {
+        "brokerage": 0.0003,
+        "stt_buy": 0.001,
+        "stt_sell": 0.001,
+        "exchange": 3.35e-05,
+        "sebi": 1e-06,
+        "gst": 0.18,
+        "stamp": 0.00015,
+        "slippage": 0.002
+      }
+    },
+    "paths": {
+      "root": "/content/stock_model/diffstock_india",
+      "raw_data": "data/raw",
+      "processed_data": "data/processed",
+      "dataset": "data/dataset",
+      "checkpoints": "checkpoints",
+      "logs": "logs",
+      "results": "results"
+    },
+    "seed": 42
+  },
+  "model_parameters": {
+    "MaTCHS": {
+      "Att-DiCEm": 268416,
+      "MRT": 1334976,
+      "subtotal": 1603392
+    },
+    "Diffusion": 181505,
+    "Total": 1784897
+  },
+  "dataset_info": {
+    "train_samples": 1940,
+    "val_samples": 365,
+    "test_samples": 406,
+    "n_stocks": 329,
+    "n_features": 16
+  }
+}

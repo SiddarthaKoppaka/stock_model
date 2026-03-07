@@ -25,7 +25,7 @@ def test_training_stability():
 
     # Load small subset of data
     print("\nLoading dataset...")
-    data = np.load('data/dataset/nifty500_10yr.npz', allow_pickle=True)
+    data = np.load('data/dataset/nifty500_20yr.npz', allow_pickle=True)
     X_train = data['X_train'][:100]  # Only 100 samples for quick test
     y_train = data['y_train'][:100]
     X_val = data['X_val'][:50]

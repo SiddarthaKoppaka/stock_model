@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-data = np.load('dataset/nifty500_10yr.npz', allow_pickle=True)
+data = np.load('dataset/nifty500_20yr.npz', allow_pickle=True)
 X_train = data['X_train']
 y_train = data['y_train']
 dates   = data['dates_train']

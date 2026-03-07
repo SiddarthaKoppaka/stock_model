@@ -13,7 +13,7 @@ from collections import defaultdict
 # ─────────────────────────────────────────────
 # CONFIG — change path if needed
 # ─────────────────────────────────────────────
-DATASET_PATH = "/Users/siddartha/Documents/Personal/stock_model/diffstock_india/data/dataset/nifty500_10yr.npz"
+DATASET_PATH = "/Users/siddartha/Documents/Personal/stock_model/diffstock_india/data/dataset/nifty500_20yr.npz"
 
 # ─────────────────────────────────────────────
 # HELPERS

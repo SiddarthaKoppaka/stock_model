@@ -1,0 +1,62 @@
+{
+  "5-day hold, strict top-20": {
+    "ann_ret": 2.096094442140886,
+    "sharpe": 5.2709041494049735,
+    "max_dd": -0.06158644851919022,
+    "win_rate": 0.8024691358024691,
+    "ann_turnover": 9457.777777777777,
+    "avg_overlap": 1.125,
+    "n_periods": 81.0,
+    "avg_trades": 37.53086419753087
+  },
+  "10-day hold, strict top-20": {
+    "ann_ret": 0.800263021445264,
+    "sharpe": 4.276597214038728,
+    "max_dd": -0.07232442287043106,
+    "win_rate": 0.875,
+    "ann_turnover": 4743.9,
+    "avg_overlap": 0.9487179487179487,
+    "n_periods": 40.0,
+    "avg_trades": 37.65
+  },
+  "5-day hold, band 6%/25%": {
+    "ann_ret": 1.9143567331829572,
+    "sharpe": 5.000344139876428,
+    "max_dd": -0.06872805949063336,
+    "win_rate": 0.7901234567901234,
+    "ann_turnover": 7933.333333333333,
+    "avg_overlap": 4.1875,
+    "n_periods": 81.0,
+    "avg_trades": 31.48148148148148
+  },
+  "5-day hold, band 6%/40%": {
+    "ann_ret": 1.5759768280153459,
+    "sharpe": 4.566503893831275,
+    "max_dd": -0.07210769673611177,
+    "win_rate": 0.7901234567901234,
+    "ann_turnover": 6645.333333333333,
+    "avg_overlap": 6.775,
+    "n_periods": 81.0,
+    "avg_trades": 26.37037037037037
+  },
+  "5-day hold, band 10%/40%": {
+    "ann_ret": 1.2090445692844374,
+    "sharpe": 3.6926959482773527,
+    "max_dd": -0.09114550738995977,
+    "win_rate": 0.7407407407407407,
+    "ann_turnover": 6645.333333333333,
+    "avg_overlap": 6.775,
+    "n_periods": 81.0,
+    "avg_trades": 26.37037037037037
+  },
+  "10-day hold, band 6%/40%": {
+    "ann_ret": 0.6194371116271697,
+    "sharpe": 3.5487588536229815,
+    "max_dd": -0.07813997958410683,
+    "win_rate": 0.8,
+    "ann_turnover": 3282.3,
+    "avg_overlap": 6.897435897435898,
+    "n_periods": 40.0,
+    "avg_trades": 26.05
+  }
+}

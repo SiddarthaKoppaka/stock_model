@@ -11,7 +11,7 @@ Inputs:
     - All previous pipeline outputs
 
 Outputs:
-    - data/dataset/nifty500_10yr.npz: Final tensor dataset
+    - data/dataset/nifty500_20yr.npz: Final tensor dataset
 """
 
 import yaml
@@ -95,10 +95,10 @@ class DatasetBuilder:
             if df is not None:
                 all_data[symbol] = df
 
-        # Get common date range (intersection of all dates)
-        all_dates = set(all_data[list(all_data.keys())[0]]['Date'])
+        # Get full date range (union of all dates — stocks with shorter history get NaN)
+        all_dates = set()
         for symbol, df in all_data.items():
-            all_dates = all_dates.intersection(set(df['Date']))
+            all_dates = all_dates.union(set(df['Date']))
 
         date_index = pd.DatetimeIndex(sorted(all_dates))
         T = len(date_index)
@@ -174,13 +174,15 @@ class DatasetBuilder:
         date_samples = []
         split_labels = []  # 'train', 'val', or 'test'
 
-        for t in range(L, T - H):             # ensure H days of forward returns available
+        for t in range(L, T - H - 1):          # -1: label window t+1:t+1+H needs t+H in bounds
             X = feature_tensor[t-L:t, :, :]   # (L, N, F) — window ends at t-1
 
             # Multi-horizon label: H-day compounded forward return
-            # target_tensor[t:t+H, :] contains daily returns for days t, t+1, ..., t+H-1
-            forward_rets = target_tensor[t:t+H, :]  # (H, N)
-            y = (1 + forward_rets).prod(axis=0) - 1  # (N,) compounded H-day return
+            # Label starts at t+1 (the day AFTER the last feature day) to avoid
+            # any same-day overlap between features and the label window.
+            # target_tensor[t+1:t+1+H, :] = daily returns for days t+1, ..., t+H
+            forward_rets = target_tensor[t+1:t+1+H, :]  # (H, N)
+            y = (1 + forward_rets).prod(axis=0) - 1      # (N,) compounded H-day return
 
             if np.isnan(X).mean() > 0.5 or np.isnan(y).mean() > 0.5:
                 continue
@@ -342,7 +344,7 @@ class DatasetBuilder:
         dataset['feature_names'] = np.array(feature_cols)
 
         # Save
-        output_path = self.dataset_dir / 'nifty500_10yr.npz'
+        output_path = self.dataset_dir / 'nifty500_20yr.npz'
         np.savez_compressed(output_path, **dataset)
 
         logger.info(f"\nDataset saved to: {output_path}")

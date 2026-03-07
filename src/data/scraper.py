@@ -1,9 +1,12 @@
 """
 Nifty 500 Stock Data Scraper
 
-Downloads historical OHLCV data for all Nifty 500 stocks from 2015-2026.
+Downloads historical OHLCV data for all Nifty 500 stocks from 2005-2026.
 Uses yfinance as primary source with jugaad-data as fallback for failed symbols.
 Also fetches sector/industry metadata.
+
+Partial history handling: stocks listed after 2005 are kept if they have at least
+min_trading_days (500) of data. Missing early history is left as NaN in the tensor.
 
 Inputs:
     - config: Configuration dict with date ranges and data sources
@@ -124,15 +127,19 @@ class NiftyStockScraper:
                 'industry': ['Unknown'] * len(fallback_symbols)
             })
 
-    def download_stock_data(self, symbol: str) -> Optional[pd.DataFrame]:
+    def download_stock_data(self, symbol: str, min_trading_days: int = 500) -> Optional[pd.DataFrame]:
         """
         Download OHLCV data for a single stock using yfinance.
 
+        Partial history is accepted: stocks listed after self.start_date are kept
+        provided they have at least min_trading_days of data.
+
         Args:
             symbol: Stock symbol (e.g., 'RELIANCE')
+            min_trading_days: Minimum rows required to keep the stock
 
         Returns:
-            DataFrame with OHLCV data or None if failed
+            DataFrame with OHLCV data or None if failed / insufficient history
         """
         ticker = f"{symbol}.NS"
 
@@ -145,8 +152,12 @@ class NiftyStockScraper:
                 progress=False
             )
 
-            if df.empty or len(df) < 500:
-                logger.debug(f"{symbol}: yfinance returned insufficient data ({len(df)} rows)")
+            if df.empty:
+                logger.debug(f"{symbol}: yfinance returned empty DataFrame")
+                return None
+
+            if len(df) < min_trading_days:
+                logger.warning(f"{symbol}: only {len(df)} trading days — dropping (< {min_trading_days})")
                 return None
 
             # Standardize column names
@@ -261,6 +272,43 @@ class NiftyStockScraper:
 
         return metadata
 
+    def coverage_report(self) -> None:
+        """Print a data coverage report for all downloaded CSVs."""
+        full_history_cutoff = pd.Timestamp("2006-01-01")   # ≤2y lag from start = "full"
+        partial_cutoff      = pd.Timestamp("2010-01-01")   # listed after 2010 = "partial"
+        target_start        = pd.Timestamp(self.start_date)
+
+        csv_files = sorted(self.raw_data_dir.glob("*.csv"))
+        n_full = n_partial = n_recent = 0
+        train_samples_est = 0
+
+        for csv_path in csv_files:
+            try:
+                df = pd.read_csv(csv_path, usecols=["Date"], parse_dates=["Date"])
+                first_date = df["Date"].min()
+                n_rows = len(df)
+                if first_date <= full_history_cutoff:
+                    n_full += 1
+                elif first_date <= partial_cutoff:
+                    n_partial += 1
+                else:
+                    n_recent += 1
+                # rough training-days estimate: rows before 2023-01-01
+                train_samples_est += (df["Date"] < pd.Timestamp("2023-01-01")).sum()
+            except Exception:
+                pass
+
+        n_total = len(csv_files)
+        print("\n" + "=" * 60)
+        print("DATA COVERAGE REPORT")
+        print("=" * 60)
+        print(f"Total stocks fetched         : {n_total}/500")
+        print(f"Full history (≤2006)         : {n_full}")
+        print(f"Partial history (2006–2010)  : {n_partial}")
+        print(f"Recent listing (post-2010)   : {n_recent}")
+        print(f"Training rows (est.)         : {train_samples_est:,}")
+        print("=" * 60 + "\n")
+
     def scrape_all(self, batch_size: int = 20, batch_delay: float = 2.0) -> Tuple[int, int]:
         """
         Scrape all Nifty 500 stocks with batching and resume capability.
@@ -276,11 +324,13 @@ class NiftyStockScraper:
         nifty_df = self.fetch_nifty500_list()
         all_symbols = nifty_df['symbol'].tolist()
 
-        logger.info(f"Starting scrape for {len(all_symbols)} symbols")
+        min_days = 500  # matches config min_trading_days
+        logger.info(f"Starting scrape for {len(all_symbols)} symbols (min {min_days} trading days)")
 
         # Track progress
         successful = 0
         failed_symbols = []
+        dropped_symbols = []   # downloaded but < min_trading_days
         all_metadata = {}
 
         # Resume: skip already downloaded symbols
@@ -294,12 +344,17 @@ class NiftyStockScraper:
             batch = symbols_to_download[i:i+batch_size]
 
             for symbol in tqdm(batch, desc=f"Batch {i//batch_size + 1}", leave=False):
-                # Try yfinance first
-                df = self.download_stock_data(symbol)
+                # Try yfinance first (partial history accepted, min_days enforced inside)
+                df = self.download_stock_data(symbol, min_trading_days=min_days)
 
                 # Fallback to jugaad if yfinance failed
                 if df is None:
                     df = self.download_stock_data_jugaad(symbol)
+                    # jugaad fallback: enforce min_days here too
+                    if df is not None and len(df) < min_days:
+                        logger.warning(f"{symbol}: jugaad returned {len(df)} rows — dropping")
+                        dropped_symbols.append(symbol)
+                        df = None
 
                 # Save if successful
                 if df is not None and not df.empty:
@@ -307,8 +362,9 @@ class NiftyStockScraper:
                     df.to_csv(output_path, index=False)
                     successful += 1
                 else:
-                    failed_symbols.append(symbol)
-                    logger.warning(f"{symbol}: Failed to download data")
+                    if symbol not in dropped_symbols:
+                        failed_symbols.append(symbol)
+                        logger.warning(f"{symbol}: Failed to download data")
 
             # Rate limiting between batches
             if i + batch_size < len(symbols_to_download):
@@ -333,11 +389,22 @@ class NiftyStockScraper:
                 f.write('\n'.join(failed_symbols))
             logger.warning(f"{len(failed_symbols)} symbols failed, saved to {failed_path}")
 
+        # Save dropped-symbols log
+        if dropped_symbols:
+            dropped_path = self.raw_data_dir / "dropped_symbols.txt"
+            with open(dropped_path, 'w') as f:
+                f.write('\n'.join(dropped_symbols))
+            logger.warning(f"{len(dropped_symbols)} symbols dropped (< {min_days} days), saved to {dropped_path}")
+
         # Generate summary
         logger.info(f"\nScraping Summary:")
         logger.info(f"  Total symbols: {len(all_symbols)}")
         logger.info(f"  Successful: {successful + len(existing_symbols)}")
-        logger.info(f"  Failed: {len(failed_symbols)}")
+        logger.info(f"  Dropped (insufficient history): {len(dropped_symbols)}")
+        logger.info(f"  Failed (download error): {len(failed_symbols)}")
+
+        # Print coverage report
+        self.coverage_report()
 
         return successful + len(existing_symbols), len(failed_symbols)
 

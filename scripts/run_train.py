@@ -57,7 +57,7 @@ def main():
     print("=" * 80)
 
     # Load dataset
-    dataset_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'nifty500_10yr.npz'
+    dataset_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'nifty500_20yr.npz'
 
     if not dataset_path.exists():
         print(f"Dataset not found at {dataset_path}")

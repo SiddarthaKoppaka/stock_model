@@ -142,7 +142,9 @@ class DataValidator:
         Returns:
             Validation report dictionary
         """
-        parquet_files = list(self.processed_data_dir.glob("*.parquet"))
+        # Exclude *_features.parquet (engineered output) — only validate raw cleaned files
+        parquet_files = [f for f in self.processed_data_dir.glob("*.parquet")
+                         if not f.stem.endswith("_features")]
         symbols = [f.stem for f in parquet_files]
 
         logger.info(f"Validating {len(symbols)} stocks...")
