@@ -234,8 +234,16 @@ class FeatureEngineer:
         # Normalize features (16 features, including close_ret)
         df = self.normalize_features(df, feature_cols)
 
-        # Keep target (close_ret) unnormalized + all normalized features
-        output_cols = ['Date', 'Close', 'close_ret'] + [f"{col}_norm" for col in feature_cols]
+        # Keep raw features AND normalized features so dataset_builder can choose
+        # Raw cols: used when use_revin=True (RevIN normalizes at runtime per sample)
+        # Norm cols: used when use_revin=False (legacy rolling z-score pipeline)
+        # close_ret is already in feature_cols — use dict.fromkeys to deduplicate
+        # while preserving order: Date, Close first, then all raw features, then norms
+        output_cols = list(dict.fromkeys(
+            ['Date', 'Close']
+            + feature_cols                              # raw (includes close_ret)
+            + [f"{col}_norm" for col in feature_cols]  # rolling 252-day z-score
+        ))
 
         # Select only existing columns
         output_cols = [col for col in output_cols if col in df.columns]

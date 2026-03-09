@@ -10,6 +10,7 @@ data:
   rebalance_freq: weekly     # for consistency
   corr_threshold: 0.25       # was 0.4
   nifty500_url: "https://archives.nseindia.com/content/indices/ind_nifty500list.csv"
+  regime_probs_path: "data/regime/daily_regime_probs.parquet"
 
   # Data quality thresholds
   max_missing_pct: 0.15
@@ -31,6 +32,16 @@ model:
   beta_start: 0.0001
   beta_end: 0.02             # was 0.015 — slightly wider noise range
   dropout: 0.10              # was 0.15 — ease off during harder multi-regime learning
+  # ── ablation flags (set to false to reproduce old checkpoint) ───────────────
+  use_revin: true            # per-sample robust normalisation over lookback window
+  use_regime: true           # HMM soft regime probs as conditioning signal
+  use_moe: true              # regime-conditioned soft mixture of 3 experts
+  # ── regime / MoE hyper-params ───────────────────────────────────────────────
+  n_regime_states: 4
+  regime_embedding_dim: 16
+  n_experts: 3
+  expert_hidden_dim: 384
+  moe_load_balance_coef: 0.01
 
 training:
   batch_size: 16
@@ -44,6 +55,13 @@ training:
   ema_decay: 0.999           # was 0.995 — smoother EMA for noisier 5-day labels
   warmup_steps: 3000         # was 2000 — longer warmup for larger dataset
   noise_augmentation: 0.02   # was 0.015
+
+  # Crisis period upsampling (WeightedRandomSampler)
+  crisis_upsample_factor: 3.0
+  crisis_periods:
+    - {start: "2008-01-01", end: "2009-06-30"}   # GFC
+    - {start: "2020-01-01", end: "2020-09-30"}   # COVID crash
+    - {start: "2016-11-01", end: "2016-12-31"}   # Demonetization
 
   # Train/val/test split dates
   train_end: "2022-12-31"

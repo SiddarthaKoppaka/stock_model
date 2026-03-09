@@ -311,12 +311,18 @@ class DatasetBuilder:
         # Step 6: Assemble final dataset
         logger.info("\nStep 6/6: Assembling final dataset...")
 
-        # Feature columns (16 normalized features)
-        feature_cols = [
-            'open_ret_norm', 'high_ret_norm', 'low_ret_norm', 'close_ret_norm', 'log_volume_norm', 'hl_spread_norm',
-            'rsi_14_norm', 'rsi_5_norm', 'bb_pct_norm', 'vol_ratio_5_norm', 'vol_ratio_20_norm',
-            'macd_signal_norm', 'atr_14_norm', 'mom_5_norm', 'mom_20_norm', 'close_vwap_norm'
+        # Raw feature columns (used when use_revin=True — RevIN normalizes at runtime)
+        raw_feature_cols = [
+            'open_ret', 'high_ret', 'low_ret', 'close_ret', 'log_volume', 'hl_spread',
+            'rsi_14', 'rsi_5', 'bb_pct', 'vol_ratio_5', 'vol_ratio_20',
+            'macd_signal', 'atr_14', 'mom_5', 'mom_20', 'close_vwap'
         ]
+        # Normalized feature columns (legacy rolling z-score, used when use_revin=False)
+        norm_feature_cols = [f'{c}_norm' for c in raw_feature_cols]
+
+        use_revin = self.config.get('model', {}).get('use_revin', False)
+        feature_cols = raw_feature_cols if use_revin else norm_feature_cols
+        logger.info(f"Feature mode: {'raw (RevIN)' if use_revin else 'rolling z-score (legacy)'}")
 
         # Assemble tensor
         feature_tensor, target_tensor, date_index = self.assemble_feature_tensor(
@@ -339,9 +345,39 @@ class DatasetBuilder:
             split_dates
         )
 
+        # ── Regime probabilities (Change 2) ──────────────────────────────────────
+        use_regime = self.config.get('model', {}).get('use_regime', False)
+        if use_regime:
+            regime_probs_path = (
+                self.root / self.config['data'].get('regime_probs_path', 'data/regime/daily_regime_probs.parquet')
+            )
+            if regime_probs_path.exists():
+                logger.info("Attaching regime probabilities to dataset...")
+                regime_df = pd.read_parquet(regime_probs_path)
+                regime_df['date'] = pd.to_datetime(regime_df['date'])
+                regime_df = regime_df.set_index('date')
+                n_states = self.config.get('model', {}).get('n_regime_states', 4)
+                prob_cols = [f'prob_state_{i}' for i in range(n_states)]
+
+                for split in ['train', 'val', 'test']:
+                    dates = dataset[f'dates_{split}']
+                    probs = np.zeros((len(dates), n_states), dtype=np.float32)
+                    for i, d in enumerate(dates):
+                        d_ts = pd.Timestamp(d)
+                        if d_ts in regime_df.index:
+                            probs[i] = regime_df.loc[d_ts, prob_cols].values
+                        else:
+                            # Nearest-date fallback
+                            nearest = regime_df.index[regime_df.index.get_indexer([d_ts], method='nearest')[0]]
+                            probs[i] = regime_df.loc[nearest, prob_cols].values
+                    dataset[f'regime_probs_{split}'] = probs
+                logger.info("Regime probabilities attached ✓")
+            else:
+                logger.warning(f"Regime probs not found at {regime_probs_path} — skipping")
+
         # Add metadata
         dataset['stock_symbols'] = np.array(passing_symbols)
-        dataset['feature_names'] = np.array(feature_cols)
+        dataset['feature_names'] = np.array(raw_feature_cols)  # always store raw names
 
         # Save
         output_path = self.dataset_dir / 'nifty500_20yr.npz'

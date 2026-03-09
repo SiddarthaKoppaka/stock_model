@@ -69,13 +69,22 @@ def main():
 
     X_train = data['X_train']
     y_train = data['y_train']
-    X_val = data['X_val']
-    y_val = data['y_val']
+    X_val   = data['X_val']
+    y_val   = data['y_val']
     stock_symbols = data['stock_symbols']
 
+    # Optional: dates (for crisis upsampling) and regime_probs
+    dates_train        = data['dates_train']        if 'dates_train'        in data else None
+    regime_probs_train = data['regime_probs_train'] if 'regime_probs_train' in data else None
+    regime_probs_val   = data['regime_probs_val']   if 'regime_probs_val'   in data else None
+
     print(f"Train samples: {len(X_train)}")
-    print(f"Val samples: {len(X_val)}")
-    print(f"Stocks: {len(stock_symbols)}")
+    print(f"Val samples:   {len(X_val)}")
+    print(f"Stocks:        {len(stock_symbols)}")
+    if regime_probs_train is not None:
+        print(f"Regime probs:  train={regime_probs_train.shape}  val={regime_probs_val.shape}")
+    else:
+        print("Regime probs:  not found in dataset (use_regime=False or dataset not rebuilt)")
 
     # Load verified relation matrices (rebuilt with corr_threshold=0.25)
     relation_path = Path(config['paths']['root']) / config['paths']['dataset'] / 'relation_matrices.npz'
@@ -112,11 +121,18 @@ def main():
         trainer.load_checkpoint(args.resume)
         print(f"Resumed from checkpoint: {args.resume}")
 
+    # Build train_data tuple:  (X, y, dates, regime_probs) when available
+    if dates_train is not None and regime_probs_train is not None:
+        train_data = (X_train, y_train, dates_train, regime_probs_train)
+    elif dates_train is not None:
+        train_data = (X_train, y_train, dates_train)
+    else:
+        train_data = (X_train, y_train)
+
+    val_data = (X_val, y_val, regime_probs_val) if regime_probs_val is not None else (X_val, y_val)
+
     # Train
-    history = trainer.train(
-        train_data=(X_train, y_train),
-        val_data=(X_val, y_val)
-    )
+    history = trainer.train(train_data=train_data, val_data=val_data)
 
     print("\nTraining completed!")
     print(f"Best validation IC: {trainer.best_val_ic:.4f}")

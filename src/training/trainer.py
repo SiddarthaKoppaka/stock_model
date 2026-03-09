@@ -12,10 +12,11 @@ Comprehensive training loop with:
 
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 import numpy as np
+import pandas as pd
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 import json
 import shutil
 import os
@@ -133,6 +134,22 @@ class DiffSTOCKTrainer:
         logger.info(f"Trainer initialized on device: {self.device}")
         logger.info(f"Mixed precision: {self.use_amp}")
 
+    def _build_crisis_weights(self, dates: np.ndarray) -> torch.Tensor:
+        """Build per-sample weights for crisis period upsampling."""
+        factor = self.config['training'].get('crisis_upsample_factor', 1.0)
+        crisis_periods = self.config['training'].get('crisis_periods', [])
+
+        weights = np.ones(len(dates), dtype=np.float32)
+        dates_ts = pd.to_datetime(dates)
+
+        for period in crisis_periods:
+            start = pd.Timestamp(period['start'])
+            end = pd.Timestamp(period['end'])
+            mask = (dates_ts >= start) & (dates_ts <= end)
+            weights[mask] = factor
+
+        return torch.FloatTensor(weights)
+
     def train_epoch(self, train_loader: DataLoader) -> float:
         """Train for one epoch."""
         self.model.train()
@@ -142,7 +159,14 @@ class DiffSTOCKTrainer:
         pbar = tqdm(train_loader, desc=f"Epoch {self.current_epoch}")
 
         for batch in pbar:
-            X, y = batch
+            # Batch may be (X, y) or (X, y, regime_probs)
+            if len(batch) == 3:
+                X, y, regime_probs = batch
+                regime_probs = regime_probs.to(self.device)
+            else:
+                X, y = batch
+                regime_probs = None
+
             X = X.to(self.device)  # (B, L, N, F)
             y = y.to(self.device)  # (B, N)
 
@@ -155,40 +179,30 @@ class DiffSTOCKTrainer:
             # Forward pass with mixed precision
             if self.use_amp:
                 with torch.cuda.amp.autocast():
-                    loss, _ = self.model(X, self.R_mask, y)
+                    loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs)
 
-                # Backward pass with scaling
                 self.scaler.scale(loss).backward()
-
-                # Gradient clipping
                 self.scaler.unscale_(self.optimizer)
                 torch.nn.utils.clip_grad_norm_(
                     self.model.parameters(),
                     self.config['training']['grad_clip']
                 )
-
-                # Optimizer step
                 self.scaler.step(self.optimizer)
                 self.scaler.update()
             else:
-                loss, _ = self.model(X, self.R_mask, y)
+                loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs)
                 loss.backward()
-
-                # Gradient clipping
                 torch.nn.utils.clip_grad_norm_(
                     self.model.parameters(),
                     self.config['training']['grad_clip']
                 )
-
                 self.optimizer.step()
 
             # Update EMA
             self.ema.update()
 
-            # Track loss
             total_loss += loss.item()
             n_batches += 1
-
             pbar.set_postfix({'loss': total_loss / n_batches})
 
         return total_loss / n_batches
@@ -197,75 +211,111 @@ class DiffSTOCKTrainer:
     def evaluate(self, val_loader: DataLoader) -> Dict:
         """Evaluate on validation set using EMA weights."""
         self.model.eval()
-
-        # Apply EMA weights
         self.ema.apply_shadow()
 
         all_predictions = []
         all_targets = []
 
         for batch in tqdm(val_loader, desc="Validation"):
-            X, y = batch
+            if len(batch) == 3:
+                X, y, regime_probs = batch
+                regime_probs = regime_probs.to(self.device)
+            else:
+                X, y = batch
+                regime_probs = None
+
             X = X.to(self.device)
             y = y.to(self.device)
 
-            # Forward pass (no noise augmentation)
-            predictions, uncertainty = self.model(X, self.R_mask, n_samples=10)
-
+            predictions, _ = self.model(X, self.R_mask, n_samples=10, regime_probs=regime_probs)
             all_predictions.append(predictions.cpu().numpy())
             all_targets.append(y.cpu().numpy())
 
-        # Restore original weights
         self.ema.restore()
 
-        # Concatenate
-        y_pred = np.concatenate(all_predictions, axis=0)  # (n_samples, N)
+        y_pred = np.concatenate(all_predictions, axis=0)
         y_true = np.concatenate(all_targets, axis=0)
-
-        # Compute metrics
-        metrics = compute_all_metrics(y_pred, y_true)
-
-        return metrics
+        return compute_all_metrics(y_pred, y_true)
 
     def train(
         self,
-        train_data: Tuple[np.ndarray, np.ndarray],
-        val_data: Tuple[np.ndarray, np.ndarray]
+        train_data: Tuple,
+        val_data: Tuple,
     ) -> Dict:
         """
         Full training loop.
 
         Args:
-            train_data: (X_train, y_train)
-            val_data: (X_val, y_val)
+            train_data: (X, y) | (X, y, dates) | (X, y, dates, regime_probs)
+            val_data:   (X, y) | (X, y, regime_probs)
 
         Returns:
             Training history
         """
-        X_train, y_train = train_data
-        X_val, y_val = val_data
+        # Unpack train data
+        if len(train_data) == 4:
+            X_train, y_train, dates_train, regime_probs_train = train_data
+        elif len(train_data) == 3:
+            X_train, y_train, dates_train = train_data
+            regime_probs_train = None
+        else:
+            X_train, y_train = train_data
+            dates_train = None
+            regime_probs_train = None
 
-        # Create dataloaders
-        train_dataset = TensorDataset(
-            torch.FloatTensor(X_train),
-            torch.FloatTensor(y_train)
+        # Unpack val data
+        if len(val_data) == 3:
+            X_val, y_val, regime_probs_val = val_data
+        else:
+            X_val, y_val = val_data
+            regime_probs_val = None
+
+        # Build crisis-period upsampling weights
+        use_crisis = (
+            dates_train is not None
+            and self.config['training'].get('crisis_upsample_factor', 1.0) > 1.0
+            and len(self.config['training'].get('crisis_periods', [])) > 0
         )
+        if use_crisis:
+            sample_weights = self._build_crisis_weights(dates_train)
+            n_crisis = int((sample_weights > 1).sum().item())
+            logger.info(f"Crisis upsampling: {n_crisis} crisis samples at "
+                        f"{self.config['training']['crisis_upsample_factor']}x weight")
+            sampler = WeightedRandomSampler(
+                weights=sample_weights,
+                num_samples=len(sample_weights),
+                replacement=True,
+            )
+            train_shuffle = False
+        else:
+            sampler = None
+            train_shuffle = True
+
+        # Build train dataset (include regime_probs as 3rd tensor if available)
+        train_tensors = [torch.FloatTensor(X_train), torch.FloatTensor(y_train)]
+        if regime_probs_train is not None:
+            train_tensors.append(torch.FloatTensor(regime_probs_train))
+        train_dataset = TensorDataset(*train_tensors)
+
         train_loader = DataLoader(
             train_dataset,
             batch_size=self.config['training']['batch_size'],
-            shuffle=True,
-            num_workers=0
+            shuffle=train_shuffle,
+            sampler=sampler,
+            num_workers=0,
         )
 
-        val_dataset = TensorDataset(
-            torch.FloatTensor(X_val),
-            torch.FloatTensor(y_val)
-        )
+        # Build val dataset
+        val_tensors = [torch.FloatTensor(X_val), torch.FloatTensor(y_val)]
+        if regime_probs_val is not None:
+            val_tensors.append(torch.FloatTensor(regime_probs_val))
+        val_dataset = TensorDataset(*val_tensors)
+
         val_loader = DataLoader(
             val_dataset,
             batch_size=self.config['training']['batch_size'],
             shuffle=False,
-            num_workers=0
+            num_workers=0,
         )
 
         # Training history
