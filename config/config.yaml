@@ -30,19 +30,19 @@ model:
   diffusion_T: 150           # was 100
   beta_start: 0.0001
   beta_end: 0.02             # was 0.015 — slightly wider noise range
-  dropout: 0.15              # was 0.30 — reduce regularization, model needs capacity
+  dropout: 0.10              # was 0.15 — ease off during harder multi-regime learning
 
 training:
   batch_size: 16
-  learning_rate: 0.0003      # was 0.0001 — 3x higher, plateau suggests LR too low
-  weight_decay: 0.005        # was 0.01 — less L2, let model fit more freely
+  learning_rate: 0.0001      # reduced from 0.0003 — more data = more gradient signal per epoch
+  weight_decay: 0.01         # increased from 0.005 — more regularization for wider distribution
   drop_extreme_label_pct: 0.025
   use_cs_zscore_labels: true
   max_epochs: 250            # was 200 — plateau hit at 105, give more room
   patience: 50               # was 25 — don't stop early, 5-day IC is noisier
   grad_clip: 1.0             # was 0.8
   ema_decay: 0.999           # was 0.995 — smoother EMA for noisier 5-day labels
-  warmup_steps: 2000         # was 800 — longer warmup for higher LR
+  warmup_steps: 3000         # was 2000 — longer warmup for larger dataset
   noise_augmentation: 0.02   # was 0.015
 
   # Train/val/test split dates

@@ -27,6 +27,10 @@ tqdm>=4.65.0
 pyyaml>=6.0
 loguru>=0.7.0
 
+# AI Advisor
+anthropic>=0.18.0
+feedparser>=6.0.0
+
 # Development
 pytest>=7.4.0
 jupyter>=1.0.0
