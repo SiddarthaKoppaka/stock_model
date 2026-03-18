@@ -72,7 +72,7 @@ def main():
     backtest_src = (ROOT / 'tests' / 'backtest.py').read_text()
     # Patch the hardcoded Colab path
     backtest_src = backtest_src.replace(
-        '"/content/drive/MyDrive/DiffSTOCK_Outputs/aligned_backtest"',
+        '"/content/drive/MyDrive/DHARMA_Outputs/aligned_backtest"',
         repr(results_dir)
     )
 

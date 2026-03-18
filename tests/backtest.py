@@ -1,5 +1,5 @@
 """
-DiffSTOCK — Aligned Backtest
+DHARMA — Aligned Backtest
 ==============================
 The signal predicts 5-day forward returns.
 So we must:
@@ -34,7 +34,7 @@ INITIAL_CAP     = 1_000_000
 ROUND_TRIP_COST = 0.006939   # full round trip
 COST_BUY        = 0.003469
 COST_SELL       = 0.003470
-RESULTS_DIR     = "/content/drive/MyDrive/DiffSTOCK_Outputs/aligned_backtest"
+RESULTS_DIR     = "/content/drive/MyDrive/DHARMA_Outputs/aligned_backtest"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 print(f"Test period: {dates[0].date()} → {dates[-1].date()}")
@@ -247,7 +247,7 @@ ax.set_xlabel('Annualised Turnover (%)')
 ax.set_ylabel('Sharpe Ratio')
 ax.grid(True, alpha=0.3)
 
-plt.suptitle('DiffSTOCK — Aligned Backtest (5-day hold = 5-day labels)',
+plt.suptitle('DHARMA — Aligned Backtest (5-day hold = 5-day labels)',
              fontsize=13, fontweight='bold')
 plt.tight_layout()
 plot_path = f"{RESULTS_DIR}/aligned_backtest.png"

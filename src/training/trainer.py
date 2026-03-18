@@ -1,5 +1,5 @@
 """
-DiffSTOCK Trainer
+DHARMA Trainer
 
 Comprehensive training loop with:
 - EMA (Exponential Moving Average) of weights
@@ -23,7 +23,7 @@ import os
 from tqdm import tqdm
 from loguru import logger
 
-from ..model.diffstock import DiffSTOCK
+from ..model.dharma import DHARMA
 from ..evaluation.metrics import compute_all_metrics
 
 
@@ -63,14 +63,14 @@ class EMA:
         self.backup = {}
 
 
-class DiffSTOCKTrainer:
+class DHARMATrainer:
     """
-    Trainer for DiffSTOCK model.
+    Trainer for DHARMA model.
     """
 
     def __init__(
         self,
-        model: DiffSTOCK,
+        model: DHARMA,
         config: Dict,
         R_mask: torch.Tensor,
         device: torch.device = None
@@ -79,7 +79,7 @@ class DiffSTOCKTrainer:
         Initialize trainer.
 
         Args:
-            model: DiffSTOCK model
+            model: DHARMA model
             config: Configuration dict
             R_mask: Relation mask tensor (N, N)
             device: Device to train on
@@ -136,15 +136,18 @@ class DiffSTOCKTrainer:
 
     def _build_crisis_weights(self, dates: np.ndarray) -> torch.Tensor:
         """Build per-sample weights for crisis period upsampling."""
-        factor = self.config['training'].get('crisis_upsample_factor', 1.0)
-        crisis_periods = self.config['training'].get('crisis_periods', [])
+        factor = self.config['data'].get('crisis_sample_weight', 1.0)
+        crisis_periods = self.config['data'].get('crisis_periods', [])
 
         weights = np.ones(len(dates), dtype=np.float32)
         dates_ts = pd.to_datetime(dates)
 
         for period in crisis_periods:
-            start = pd.Timestamp(period['start'])
-            end = pd.Timestamp(period['end'])
+            # Support both list format [start, end] and dict format {start, end}
+            if isinstance(period, (list, tuple)):
+                start, end = pd.Timestamp(period[0]), pd.Timestamp(period[1])
+            else:
+                start, end = pd.Timestamp(period['start']), pd.Timestamp(period['end'])
             mask = (dates_ts >= start) & (dates_ts <= end)
             weights[mask] = factor
 
@@ -273,14 +276,14 @@ class DiffSTOCKTrainer:
         # Build crisis-period upsampling weights
         use_crisis = (
             dates_train is not None
-            and self.config['training'].get('crisis_upsample_factor', 1.0) > 1.0
-            and len(self.config['training'].get('crisis_periods', [])) > 0
+            and self.config['data'].get('crisis_sample_weight', 1.0) > 1.0
+            and len(self.config['data'].get('crisis_periods', [])) > 0
         )
         if use_crisis:
             sample_weights = self._build_crisis_weights(dates_train)
             n_crisis = int((sample_weights > 1).sum().item())
             logger.info(f"Crisis upsampling: {n_crisis} crisis samples at "
-                        f"{self.config['training']['crisis_upsample_factor']}x weight")
+                        f"{self.config['data']['crisis_sample_weight']}x weight")
             sampler = WeightedRandomSampler(
                 weights=sample_weights,
                 num_samples=len(sample_weights),
@@ -364,7 +367,7 @@ class DiffSTOCKTrainer:
                     logger.info(f"  New best model saved! IC: {self.best_val_ic:.4f}")
 
                     # Copy to Google Drive (for Colab persistence)
-                    drive_ckpt = '/content/drive/MyDrive/DiffSTOCK_Outputs/checkpoints'
+                    drive_ckpt = '/content/drive/MyDrive/DHARMA_Outputs/checkpoints'
                     if os.path.exists('/content/drive'):
                         os.makedirs(drive_ckpt, exist_ok=True)
                         local_ckpt = str(self.checkpoint_dir / 'best_model.pt')

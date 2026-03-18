@@ -1,5 +1,5 @@
 """
-DiffSTOCK Simulation Engine
+DHARMA Simulation Engine
 
 Three operation modes:
     1. Walk-Forward Live Simulation — replay test period day by day
@@ -33,7 +33,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
 
 import yaml
-from src.model.diffstock import DiffSTOCK, create_diffstock_model
+from src.model.dharma import DHARMA, create_dharma_model
 from src.evaluation.metrics import portfolio_sharpe, max_drawdown
 
 
@@ -211,12 +211,12 @@ SCENARIO_REGISTRY = {
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  DiffSTOCKSimulator
+#  DHARMASimulator
 # ═══════════════════════════════════════════════════════════════════════════════
 
-class DiffSTOCKSimulator:
+class DHARMASimulator:
     """
-    Self-contained simulation engine for the DiffSTOCK model.
+    Self-contained simulation engine for the DHARMA model.
 
     Supports three modes:
         1. Walk-forward live simulation
@@ -296,8 +296,8 @@ class DiffSTOCKSimulator:
         self.round_trip_cost = total_round_trip_cost(self.costs)
 
         # ── load model ───────────────────────────────────────────────────────
-        logger.info("Loading DiffSTOCK model …")
-        self.model = create_diffstock_model(self.config, self.n_stocks)
+        logger.info("Loading DHARMA model …")
+        self.model = create_dharma_model(self.config, self.n_stocks)
         ckpt = torch.load(self.checkpoint_path, map_location=self.device, weights_only=False)
         self.model.load_state_dict(ckpt['model_state_dict'])
         self.model = self.model.to(self.device)
@@ -848,7 +848,7 @@ class DiffSTOCKSimulator:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='DiffSTOCK Simulation Engine',
+        description='DHARMA Simulation Engine',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -878,7 +878,7 @@ Examples:
 
     args = parser.parse_args()
 
-    sim = DiffSTOCKSimulator(
+    sim = DHARMASimulator(
         checkpoint=args.checkpoint,
         config=args.config,
         device=args.device,

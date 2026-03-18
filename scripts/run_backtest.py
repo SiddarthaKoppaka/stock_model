@@ -16,12 +16,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.utils.logger import setup_logger
-from src.model.diffstock import create_diffstock_model
+from src.model.dharma import create_dharma_model
 from src.evaluation.backtester import IndianMarketBacktester
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Backtest DiffSTOCK model')
+    parser = argparse.ArgumentParser(description='Backtest DHARMA model')
     parser.add_argument(
         '--checkpoint',
         type=str,
@@ -56,7 +56,7 @@ def main():
     )
 
     print("=" * 80)
-    print("DiffSTOCK Backtest")
+    print("DHARMA Backtest")
     print("=" * 80)
 
     # Load dataset
@@ -85,7 +85,7 @@ def main():
 
     # Create model
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = create_diffstock_model(config, len(stock_symbols))
+    model = create_dharma_model(config, len(stock_symbols))
     model = model.to(device)
 
     # Load checkpoint

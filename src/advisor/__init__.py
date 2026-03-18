@@ -1,10 +1,10 @@
 """
-DiffSTOCK AI Investment Advisor
+DHARMA AI Investment Advisor
 
 Claude-powered assessment layer combining model predictions,
 real-time market data, and news sentiment.
 """
 
-from .advisor import DiffSTOCKAdvisor
+from .advisor import DHARMAAdvisor
 
-__all__ = ['DiffSTOCKAdvisor']
+__all__ = ['DHARMAAdvisor']

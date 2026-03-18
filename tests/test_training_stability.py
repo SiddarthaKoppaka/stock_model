@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.model.diffstock import DiffSTOCK
+from src.model.dharma import DHARMA
 
 def test_training_stability():
     """Test that model trains without NaN for 5 iterations."""
@@ -61,7 +61,10 @@ def test_training_stability():
     # Create model
     print("\nInitializing model...")
     B, L, N, F = X_train.shape
-    model = DiffSTOCK(
+    revin_cfg = config.get('revin', {})
+    hmm_cfg = config.get('hmm', {})
+    moe_cfg = config['model'].get('moe', {})
+    model = DHARMA(
         n_stocks=N,
         in_features=F,
         d_model=config['model']['d_model'],
@@ -71,7 +74,15 @@ def test_training_stability():
         diffusion_T=config['model']['diffusion_T'],
         beta_start=config['model']['beta_start'],
         beta_end=config['model']['beta_end'],
-        dropout=config['model']['dropout']
+        dropout=config['model']['dropout'],
+        use_revin=revin_cfg.get('enabled', False),
+        use_regime=hmm_cfg.get('enabled', False),
+        use_moe=moe_cfg.get('enabled', False),
+        n_regime_states=hmm_cfg.get('n_regimes', 4),
+        regime_embedding_dim=hmm_cfg.get('regime_embed_dim', 16),
+        n_experts=moe_cfg.get('n_experts', 3),
+        expert_hidden_dim=moe_cfg.get('expert_hidden_dim', 256),
+        moe_load_balance_coef=moe_cfg.get('load_balance_coef', 0.01),
     )
 
     total_params = sum(p.numel() for p in model.parameters())

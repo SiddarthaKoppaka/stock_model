@@ -135,8 +135,8 @@ def check_model_import():
         from src.model.diffusion import AdaptiveDDPM
         print("  ✓ AdaptiveDDPM")
 
-        from src.model.diffstock import DiffSTOCK
-        print("  ✓ DiffSTOCK")
+        from src.model.dharma import DHARMA
+        print("  ✓ DHARMA")
 
         print("\n✓ All model modules imported successfully")
         return True
@@ -152,11 +152,11 @@ def run_quick_model_test():
 
     try:
         import torch
-        from src.model.diffstock import DiffSTOCK
+        from src.model.dharma import DHARMA
 
         # Small model for quick test
         B, L, N, F = 4, 20, 50, 15
-        model = DiffSTOCK(n_stocks=N, in_features=F, d_model=32, diffusion_T=50)
+        model = DHARMA(n_stocks=N, in_features=F, d_model=32, diffusion_T=50)
 
         x = torch.randn(B, L, N, F)
         y = torch.randn(B, N) * 0.02
@@ -192,7 +192,7 @@ def run_quick_model_test():
 def main():
     """Run all verification checks."""
     print("=" * 80)
-    print("DiffSTOCK India - Installation Verification")
+    print("DHARMA India - Installation Verification")
     print("=" * 80)
 
     checks = [

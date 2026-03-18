@@ -1,82 +1,191 @@
-# DiffSTOCK India Configuration File
-# All hyperparameters - single source of truth
+# ============================================================
+# DHARMA India — config.yaml
+# Architecture: MaTCHS + Adaptive DDPM + RevIN + HMM + Soft MoE
+# Version: 3.0 — Regime-Aware Architecture
+# Updated: March 2026
+# Ref: https://github.com/marcuswang6/stock-top-papers
+# ============================================================
 
 data:
   start_date: "2005-01-01"
   end_date: "2026-02-26"
   lookback_window: 20
   n_features: 16
-  label_horizon: 5           # predict 5-day (weekly) forward return
-  rebalance_freq: weekly     # for consistency
-  corr_threshold: 0.25       # was 0.4
+  label_horizon: 5                   # 5-day (weekly) forward return
+  rebalance_freq: weekly
+  corr_threshold: 0.25
   nifty500_url: "https://archives.nseindia.com/content/indices/ind_nifty500list.csv"
-  regime_probs_path: "data/regime/daily_regime_probs.parquet"
 
-  # Data quality thresholds
+  # Data quality
   max_missing_pct: 0.15
   min_trading_days: 500
   max_zero_volume_pct: 0.10
   min_adv_crores: 5.0
-
-  # Data cleaning
   max_ffill_days: 5
   outlier_threshold: 0.20
   nifty_index_threshold: 0.05
 
-model:
-  d_model: 192               # was 96 — restore original capacity
-  n_heads_mrt: 12            # was 8 — (192/12=16 ✅)
-  n_layers_dicem: 5          # was 4
-  n_layers_mrt: 3            # was 2 — deeper relational reasoning
-  diffusion_T: 150           # was 100
-  beta_start: 0.0001
-  beta_end: 0.02             # was 0.015 — slightly wider noise range
-  dropout: 0.10              # was 0.15 — ease off during harder multi-regime learning
-  # ── ablation flags (set to false to reproduce old checkpoint) ───────────────
-  use_revin: true            # per-sample robust normalisation over lookback window
-  use_regime: true           # HMM soft regime probs as conditioning signal
-  use_moe: true              # regime-conditioned soft mixture of 3 experts
-  # ── regime / MoE hyper-params ───────────────────────────────────────────────
-  n_regime_states: 4
-  regime_embedding_dim: 16
-  n_experts: 3
-  expert_hidden_dim: 384
-  moe_load_balance_coef: 0.01
+  # Crisis period upsampling — these windows get 3x sample weight
+  # via WeightedRandomSampler during training
+  crisis_periods:
+    - ["2008-01-01", "2009-06-30"]   # GFC
+    - ["2020-01-01", "2020-09-30"]   # COVID crash
+    - ["2016-11-01", "2016-12-31"]   # Demonetization
+  crisis_sample_weight: 3.0
 
+# ============================================================
+# LAYER 0: RevIN — Reversible Instance Normalization
+# Applied as a model-agnostic wrapper BEFORE the encoder.
+# Each 20-day lookback window is normalized using its OWN
+# statistics (robust: median + IQR/1.3489 rather than mean/std
+# to handle crisis-era outliers). Output is denormalized after
+# the DDPM head using the same per-sample statistics.
+# Ref: Kim et al. 2021 — "Reversible Instance Normalization"
+# ============================================================
+revin:
+  enabled: true
+  affine: true                       # learnable γ and β per feature
+  subtract_last: false               # use window mean, not last value
+  robust: true                       # use median/IQR instead of mean/std
+                                     # — critical for 2008 GFC outlier protection
+  eps: 1e-5
+
+# ============================================================
+# LAYER 1: HMM Regime Detector
+# Fits a 4-state Gaussian HMM on NIFTY50 daily returns.
+# Produces soft regime probabilities for every trading day,
+# which are appended to the MaTCHS encoder input as a
+# 16-dim learned regime embedding (n_regimes × embed_dim).
+# Trained on train split only — NO future data leakage.
+# Saved: data/regime/hmm_model.pkl
+#        data/regime/daily_regime_probs.parquet
+# ============================================================
+hmm:
+  enabled: true
+  n_regimes: 4                       # LOW_VOL, MEDIUM, HIGH_VOL, CRISIS
+  covariance_type: "full"
+  n_iter: 200
+  random_state: 42
+  regime_embed_dim: 16               # appended to MaTCHS input
+  fit_on: "nifty50_returns"          # NIFTY50 only, not individual stocks
+  feature_set:
+    - "log_return"
+    - "realized_vol_5d"
+    - "realized_vol_20d"
+  # Transition smoothing — prevents regime flipping on noisy days
+  min_regime_duration_days: 5
+
+# ============================================================
+# LAYER 2: MaTCHS Encoder
+# MaTCHS = Masked Temporal Convolutional + Hypergraph Relational
+# Two sub-modules:
+#   Att-DiCEm: Temporal feature extraction (dilated causal conv)
+#   MRT: Masked Relational Transformer (cross-stock attention)
+# Input: [n_stocks, lookback, n_features + regime_embed_dim]
+# ============================================================
+model:
+  # Core dimensions
+  d_model: 192                       # was 96 in Run 5 (too small)
+                                     # was 192 in 10yr run (IC=0.30) — restore
+  n_heads_mrt: 12                    # 192/12=16 per head ✓
+  n_layers_dicem: 5                  # Att-DiCEm temporal layers
+  n_layers_mrt: 3                    # Relational transformer depth
+                                     # was 2 — 3 gives one more cross-stock hop
+
+  # Regularization
+  dropout: 0.15                      # was 0.30 (over-regularized for 5-day labels)
+                                     # 5-day target is smoother → less dropout needed
+
+  # ============================================================
+  # LAYER 3: Soft Mixture of Experts (MoE) Head
+  # Replaces the single FFN projection after MaTCHS.
+  # 3 experts — each specializes in a different volatility regime:
+  #   Expert 0: Low-vol / bull market dynamics
+  #   Expert 1: Medium-vol / normal market
+  #   Expert 2: High-vol / crisis regime
+  #
+  # Gating network: Linear(d_model + regime_embed_dim, 64)
+  #                 → GELU → Linear(64, n_experts) → Softmax
+  # Soft routing: weighted sum of all experts (not hard top-1)
+  # Load balancing loss (Switch Transformer style) prevents
+  # expert collapse where one expert handles everything.
+  # ============================================================
+  moe:
+    enabled: true
+    n_experts: 3
+    expert_hidden_dim: 256           # each expert FFN hidden size
+    gate_hidden_dim: 64
+    load_balance_coef: 0.01          # Switch Transformer auxiliary loss weight
+    soft_routing: true               # weighted sum vs hard top-1
+                                     # soft is more stable during training
+
+  # ============================================================
+  # LAYER 4: Adaptive DDPM Head
+  # Diffusion head for probabilistic return prediction.
+  # Takes MaTCHS + MoE output as conditioning signal.
+  # ============================================================
+  diffusion_T: 150                   # denoising steps
+  beta_start: 0.0001
+  beta_end: 0.02                     # slightly wider than Run 5 (0.015)
+  beta_schedule: "cosine"            # cosine > linear for financial data
+                                     # avoids over-noising near T
+
+# ============================================================
+# TRAINING
+# Key changes from Run 5:
+# - LR reduced: more data = smaller gradient steps needed
+# - Warmup longer: bigger model needs more careful ramp-up
+# - Patience higher: 5-day IC is noisier → need more stability
+# - Crisis upsampling via WeightedRandomSampler
+# ============================================================
 training:
   batch_size: 16
-  learning_rate: 0.0001      # reduced from 0.0003 — more data = more gradient signal per epoch
-  weight_decay: 0.01         # increased from 0.005 — more regularization for wider distribution
-  drop_extreme_label_pct: 0.025
-  use_cs_zscore_labels: true
-  max_epochs: 250            # was 200 — plateau hit at 105, give more room
-  patience: 50               # was 25 — don't stop early, 5-day IC is noisier
-  grad_clip: 1.0             # was 0.8
-  ema_decay: 0.999           # was 0.995 — smoother EMA for noisier 5-day labels
-  warmup_steps: 3000         # was 2000 — longer warmup for larger dataset
-  noise_augmentation: 0.02   # was 0.015
+  learning_rate: 0.0001              # was 0.0003 in Run 5
+                                     # 20yr data has 2.25x more samples/epoch
+                                     # → effectively LR was too high
+  weight_decay: 0.01                 # was 0.005 — more L2 for wider distribution
+  drop_extreme_label_pct: 0.025      # clip top/bottom 2.5% of labels
+  use_cs_zscore_labels: true         # cross-sectional z-score labels
+  max_epochs: 300                    # was 250 — regime-aware needs more time
+  patience: 50                       # was 25 — 5-day IC bounces more
+  grad_clip: 1.0
+  ema_decay: 0.999                   # exponential moving average of weights
+  warmup_steps: 4000                 # was 2000 — longer for d_model=192 + MoE
+  noise_augmentation: 0.02           # Gaussian noise on features during training
 
-  # Crisis period upsampling (WeightedRandomSampler)
-  crisis_upsample_factor: 3.0
-  crisis_periods:
-    - {start: "2008-01-01", end: "2009-06-30"}   # GFC
-    - {start: "2020-01-01", end: "2020-09-30"}   # COVID crash
-    - {start: "2016-11-01", end: "2016-12-31"}   # Demonetization
-
-  # Train/val/test split dates
+  # Train/val/test splits
   train_end: "2022-12-31"
   val_start: "2023-01-01"
   val_end: "2024-06-30"
   test_start: "2024-07-01"
 
+  # MoE auxiliary loss — added to main diffusion ELBO loss
+  moe_aux_loss_weight: 0.01
+
+  # Learning rate schedule
+  scheduler: "cosine_with_restarts"
+  lr_min: 0.000005                   # floor for cosine decay
+  restart_every_n_epochs: 100        # warm restart period
+
+# ============================================================
+# EVALUATION
+# ============================================================
 evaluation:
   primary_metric: "IC"
   report_every: 5
   top_k: 20
   rebalance_freq: "weekly"
-  risk_free_rate: 0.065
+  risk_free_rate: 0.065              # NSE repo rate proxy
 
-  # Indian market transaction costs
+  # IC targets by epoch (early stopping checkpoints)
+  ic_targets:
+    epoch_30: 0.08                   # minimum viable signal — if below, abort
+    epoch_50: 0.12                   # RevIN should be working
+    epoch_100: 0.18                  # HMM regime embedding contributing
+    epoch_150: 0.22                  # MoE routing stabilized
+    final: 0.25                      # target for deployment consideration
+
+  # Indian market transaction costs (round trip)
   transaction_costs:
     brokerage: 0.0003
     stt_buy: 0.001
@@ -87,11 +196,15 @@ evaluation:
     stamp: 0.00015
     slippage: 0.002
 
+# ============================================================
+# PATHS
+# ============================================================
 paths:
   root: "/Users/siddartha/Documents/Personal/stock_model/diffstock_india"
   raw_data: "data/raw"
   processed_data: "data/processed"
   dataset: "data/dataset"
+  regime: "data/regime"              # NEW — HMM model + regime probs
   checkpoints: "checkpoints"
   logs: "logs"
   results: "results"

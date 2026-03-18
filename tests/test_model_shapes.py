@@ -17,7 +17,7 @@ from src.model.att_dicem import AttDiCEm
 from src.model.mrt import MaskedRelationalTransformer
 from src.model.matches import MaTCHS
 from src.model.diffusion import AdaptiveDDPM
-from src.model.diffstock import DiffSTOCK
+from src.model.dharma import DHARMA
 
 
 def test_att_dicem():
@@ -82,12 +82,12 @@ def test_diffusion():
     print(f"✓ DDPM sampling: {samples.shape}")
 
 
-def test_diffstock():
-    """Test full DiffSTOCK model."""
+def test_dharma():
+    """Test full DHARMA model."""
     B, L, N, F = 8, 20, 100, 15
     d_model = 64
 
-    model = DiffSTOCK(
+    model = DHARMA(
         n_stocks=N,
         in_features=F,
         d_model=d_model,
@@ -105,20 +105,20 @@ def test_diffstock():
     model.train()
     loss, _ = model(x, R_mask, y)
     assert loss.item() > 0, "Loss should be positive"
-    print(f"✓ DiffSTOCK training loss: {loss.item():.4f}")
+    print(f"✓ DHARMA training loss: {loss.item():.4f}")
 
     # Inference mode
     model.eval()
     predictions, uncertainty = model(x, R_mask, n_samples=5)
     assert predictions.shape == (B, N), f"Expected {(B, N)}, got {predictions.shape}"
     assert uncertainty.shape == (B, N), f"Expected {(B, N)}, got {uncertainty.shape}"
-    print(f"✓ DiffSTOCK inference: predictions {predictions.shape}, uncertainty {uncertainty.shape}")
+    print(f"✓ DHARMA inference: predictions {predictions.shape}, uncertainty {uncertainty.shape}")
 
 
 def test_parameter_count():
     """Test parameter counting."""
     N, F = 400, 15
-    model = DiffSTOCK(n_stocks=N, in_features=F, d_model=128)
+    model = DHARMA(n_stocks=N, in_features=F, d_model=128)
 
     params = model.count_parameters()
     total = params['Total']
@@ -130,7 +130,7 @@ def test_parameter_count():
 def run_all_tests():
     """Run all shape tests."""
     print("=" * 80)
-    print("DiffSTOCK Model Shape Tests")
+    print("DHARMA Model Shape Tests")
     print("=" * 80)
 
     try:
@@ -138,7 +138,7 @@ def run_all_tests():
         test_mrt()
         test_matches()
         test_diffusion()
-        test_diffstock()
+        test_dharma()
         test_parameter_count()
 
         print("=" * 80)

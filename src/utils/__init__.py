@@ -1,4 +1,4 @@
-"""Utility modules for DiffSTOCK India."""
+"""Utility modules for DHARMA India."""
 
 from .logger import setup_logger
 from .seed import set_seed

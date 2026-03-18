@@ -1,5 +1,5 @@
 """
-Entry point for training DiffSTOCK model.
+Entry point for training DHARMA model.
 
 Usage:
     python scripts/run_train.py [--config path/to/config.yaml]
@@ -17,12 +17,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.utils.logger import setup_logger
 from src.utils.seed import set_seed
-from src.model.diffstock import create_diffstock_model
-from src.training.trainer import DiffSTOCKTrainer
+from src.model.dharma import create_dharma_model
+from src.training.trainer import DHARMATrainer
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Train DiffSTOCK model')
+    parser = argparse.ArgumentParser(description='Train DHARMA model')
     parser.add_argument(
         '--config',
         type=str,
@@ -53,7 +53,7 @@ def main():
     set_seed(config['seed'])
 
     print("=" * 80)
-    print("DiffSTOCK Training")
+    print("DHARMA Training")
     print("=" * 80)
 
     # Load dataset
@@ -107,14 +107,14 @@ def main():
 
     # Create model
     n_stocks = len(stock_symbols)
-    model = create_diffstock_model(config, n_stocks)
+    model = create_dharma_model(config, n_stocks)
 
     # Print model summary
     model.print_model_summary()
 
     # Create trainer
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    trainer = DiffSTOCKTrainer(model, config, R_mask, device)
+    trainer = DHARMATrainer(model, config, R_mask, device)
 
     # Resume from checkpoint if specified
     if args.resume:

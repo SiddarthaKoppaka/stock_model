@@ -1,8 +1,8 @@
 """
-DiffSTOCK AI Investment Advisor
+DHARMA AI Investment Advisor
 
 Claude-powered assessment layer that combines:
-    1. DiffSTOCK model predictions (Tool 1)
+    1. DHARMA model predictions (Tool 1)
     2. Real-time market data via yfinance (Tool 2)
     3. Real-time news & sentiment (Tool 3)
 
@@ -42,11 +42,11 @@ except ImportError:
     logger.warning("anthropic package not installed. Install with: pip install anthropic")
 
 
-class DiffSTOCKAdvisor:
+class DHARMAAdvisor:
     """
     AI-powered investment assessment tool using Claude as the reasoning layer.
 
-    Combines DiffSTOCK model predictions, live market data, and news sentiment
+    Combines DHARMA model predictions, live market data, and news sentiment
     to produce actionable investment assessments.
     """
 
@@ -58,7 +58,7 @@ class DiffSTOCKAdvisor:
     ):
         """
         Args:
-            simulator: DiffSTOCKSimulator instance (model already loaded).
+            simulator: DHARMASimulator instance (model already loaded).
                        If None, tools that need the model will return stubs.
             config: optional config dict
             model_name: Claude model to use
@@ -98,7 +98,7 @@ class DiffSTOCKAdvisor:
         self.briefs_dir = Path(__file__).parent / 'outputs' / 'briefs'
         self.briefs_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info("DiffSTOCKAdvisor initialized")
+        logger.info("DHARMAAdvisor initialized")
 
     # ─────────────────────────────────────────────────────────────────────────
     #  Tool execution dispatcher
@@ -321,7 +321,7 @@ class DiffSTOCKAdvisor:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='DiffSTOCK AI Investment Advisor',
+        description='DHARMA AI Investment Advisor',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -342,7 +342,7 @@ Examples:
     parser.add_argument('--config', type=str, default='config/config.yaml',
                         help='Path to config file')
     parser.add_argument('--no-model', action='store_true',
-                        help='Run without loading the DiffSTOCK model (uses stubs)')
+                        help='Run without loading the DHARMA model (uses stubs)')
     parser.add_argument('--claude-model', type=str, default='claude-sonnet-4-20250514',
                         help='Claude model to use')
 
@@ -355,8 +355,8 @@ Examples:
     simulator = None
     if not args.no_model:
         try:
-            from src.simulation.simulator import DiffSTOCKSimulator
-            simulator = DiffSTOCKSimulator(
+            from src.simulation.simulator import DHARMASimulator
+            simulator = DHARMASimulator(
                 checkpoint=args.checkpoint,
                 config=args.config,
             )
@@ -365,7 +365,7 @@ Examples:
             logger.warning("Running without model predictions (--no-model)")
 
     # Create advisor
-    advisor = DiffSTOCKAdvisor(
+    advisor = DHARMAAdvisor(
         simulator=simulator,
         model_name=args.claude_model,
     )

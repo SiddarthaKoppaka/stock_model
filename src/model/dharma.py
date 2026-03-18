@@ -1,5 +1,5 @@
 """
-DiffSTOCK: Top-level model combining MaTCHS + Adaptive DDPM
+DHARMA: Top-level model combining MaTCHS + Adaptive DDPM
 
 Full pipeline:
     1. MaTCHS: Extract temporal and cross-stock features
@@ -17,9 +17,9 @@ from .matches import MaTCHS
 from .diffusion import AdaptiveDDPM
 
 
-class DiffSTOCK(nn.Module):
+class DHARMA(nn.Module):
     """
-    DiffSTOCK: Diffusion-based Stock Prediction Model
+    DHARMA: Diffusion-based Stock Prediction Model
     """
 
     def __init__(
@@ -124,7 +124,7 @@ class DiffSTOCK(nn.Module):
     def print_model_summary(self):
         params = self.count_parameters()
         print("=" * 80)
-        print("DiffSTOCK Model Parameters")
+        print("DHARMA Model Parameters")
         print("=" * 80)
         print(f"MaTCHS (Conditional Encoder):")
         print(f"  - Att-DiCEm:  {params['MaTCHS']['att_dicem']:>12,}")
@@ -138,15 +138,18 @@ class DiffSTOCK(nn.Module):
         print("=" * 80)
 
 
-def create_diffstock_model(config: Dict, n_stocks: int) -> DiffSTOCK:
+def create_dharma_model(config: Dict, n_stocks: int) -> DHARMA:
     """
-    Factory function — creates DiffSTOCK from config dict.
+    Factory function — creates DHARMA from config dict.
 
     Backward compatible: use_revin / use_regime / use_moe default to False
     if not present in config, preserving old checkpoint behaviour.
     """
     mc = config['model']
-    return DiffSTOCK(
+    moe_cfg = mc.get('moe', {})
+    revin_cfg = config.get('revin', {})
+    hmm_cfg = config.get('hmm', {})
+    return DHARMA(
         n_stocks=n_stocks,
         in_features=config['data']['n_features'],
         d_model=mc['d_model'],
@@ -157,14 +160,15 @@ def create_diffstock_model(config: Dict, n_stocks: int) -> DiffSTOCK:
         beta_start=mc['beta_start'],
         beta_end=mc['beta_end'],
         dropout=mc['dropout'],
-        # ablation flags
-        use_revin=mc.get('use_revin', False),
-        use_regime=mc.get('use_regime', False),
-        use_moe=mc.get('use_moe', False),
-        # regime / MoE params
-        n_regime_states=mc.get('n_regime_states', 4),
-        regime_embedding_dim=mc.get('regime_embedding_dim', 16),
-        n_experts=mc.get('n_experts', 3),
-        expert_hidden_dim=mc.get('expert_hidden_dim', 384),
-        moe_load_balance_coef=mc.get('moe_load_balance_coef', 0.01),
+        # ablation flags — now in their own top-level sections
+        use_revin=revin_cfg.get('enabled', False),
+        use_regime=hmm_cfg.get('enabled', False),
+        use_moe=moe_cfg.get('enabled', False),
+        # regime params (from hmm section)
+        n_regime_states=hmm_cfg.get('n_regimes', 4),
+        regime_embedding_dim=hmm_cfg.get('regime_embed_dim', 16),
+        # MoE params (from model.moe section)
+        n_experts=moe_cfg.get('n_experts', 3),
+        expert_hidden_dim=moe_cfg.get('expert_hidden_dim', 256),
+        moe_load_balance_coef=moe_cfg.get('load_balance_coef', 0.01),
     )

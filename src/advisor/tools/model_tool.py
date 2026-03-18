@@ -1,7 +1,7 @@
 """
-Tool 1 — DiffSTOCK Model Predictions
+Tool 1 — DHARMA Model Predictions
 
-Wraps the DiffSTOCK simulator to expose model predictions as a
+Wraps the DHARMA simulator to expose model predictions as a
 callable tool that the Claude advisor can invoke.
 """
 
@@ -37,14 +37,14 @@ _SECTOR_MAP = {
 
 class ModelPredictionsTool:
     """
-    Wraps DiffSTOCK simulator for generating model predictions.
+    Wraps DHARMA simulator for generating model predictions.
     Designed to be used as a tool by the AI advisor.
     """
 
     def __init__(self, simulator):
         """
         Args:
-            simulator: Initialised DiffSTOCKSimulator instance (model already loaded)
+            simulator: Initialised DHARMASimulator instance (model already loaded)
         """
         self.sim = simulator
         self._prev_predictions = None  # cache for rank-change computation
@@ -56,7 +56,7 @@ class ModelPredictionsTool:
         include_uncertainty: bool = True,
     ) -> Dict:
         """
-        Return DiffSTOCK's current top-K predictions.
+        Return DHARMA's current top-K predictions.
 
         Args:
             as_of_date: date string e.g. "2024-10-15"
@@ -141,7 +141,7 @@ def get_model_predictions(
     Functional interface for the model predictions tool.
 
     Args:
-        simulator: DiffSTOCKSimulator instance
+        simulator: DHARMASimulator instance
         as_of_date: date string
         top_k: number of stocks
         include_uncertainty: include uncertainty scores
@@ -158,7 +158,7 @@ def get_model_predictions(
 MODEL_TOOL_SCHEMA = {
     "name": "get_model_predictions",
     "description": (
-        "Get DiffSTOCK model's predicted 5-day forward returns for top-K "
+        "Get DHARMA model's predicted 5-day forward returns for top-K "
         "NIFTY500 stocks. Returns predicted return, uncertainty, confidence, "
         "rank, and rank change for each stock."
     ),
@@ -187,5 +187,5 @@ MODEL_TOOL_SCHEMA = {
 
 if __name__ == '__main__':
     print("Model Tool — standalone test")
-    print("This tool requires a DiffSTOCKSimulator instance.")
+    print("This tool requires a DHARMASimulator instance.")
     print("Use: from src.advisor.tools.model_tool import get_model_predictions")

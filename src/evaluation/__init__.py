@@ -1,4 +1,4 @@
-"""Evaluation modules for DiffSTOCK."""
+"""Evaluation modules for DHARMA."""
 
 from .metrics import (
     information_coefficient,

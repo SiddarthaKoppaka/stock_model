@@ -1,303 +1,241 @@
-# DiffSTOCK India: Quantitative Stock Prediction for Nifty 500
+# DHARMA: Diffusion HMM-Adaptive Regime Mixture Architecture
 
-A hybrid deep learning model combining **dilated causal convolutions**, **masked relational transformers**, and **denoising diffusion** for probabilistic stock return prediction in the Indian market.
+Regime-aware probabilistic stock return prediction for the **Nifty 500** universe, built on 20 years of Indian equity data (2005–2026).
 
-## Overview
+## Architecture (v3.0)
 
-DiffSTOCK is a state-of-the-art quantitative model designed for autonomous trading in the Nifty 500 universe (~400 actively traded stocks). It combines:
+```
+Input (B, L=20, N, F=16)
+        │
+   Layer 0 — RevIN          per-window robust normalization (median/IQR)
+        │
+   Layer 1 — HMM Embed      4-state regime → 16-dim embedding appended to features
+        │
+   Layer 2 — MaTCHS          Att-DiCEm (temporal) + MRT (cross-stock relational)
+        │                   d_model=192, 12 heads, 5+3 layers
+   Layer 3 — Soft MoE        3 regime-specialized expert FFNs, soft routing
+        │
+   Layer 4 — Adaptive DDPM   150-step cosine-schedule diffusion
+        │
+   Output: predictions (B, N) + uncertainty (B, N)
+```
 
-- **MaTCHS** (Masked Temporal-Cross-stock Historical Signal encoder)
-  - **Att-DiCEm**: Dilated causal convolutions for temporal feature extraction
-  - **MRT**: Masked Relational Transformer for inter-stock relationship modeling
-- **Adaptive DDPM**: Denoising Diffusion Probabilistic Model for probabilistic return generation
-
-### Key Features
-
-- 10 years of historical data (2015-2026) for robust training
-- Realistic Indian market transaction costs (brokerage, STT, stamp duty, slippage)
-- Walk-forward backtesting with weekly rebalancing
-- EMA weight averaging and mixed precision training
-- Comprehensive evaluation metrics (IC, ICIR, Sharpe, Max Drawdown)
+| Layer | Module | Purpose |
+|-------|--------|---------|
+| 0 | **RevIN** | Reversible Instance Normalization — each 20-day window uses its own median/IQR so 2008 crash and 2022 calm are equally learnable |
+| 1 | **HMM** | 4-state Gaussian HMM on NIFTY50 returns → soft regime probabilities → 16-dim learned embedding |
+| 2 | **MaTCHS** | Att-DiCEm (dilated causal conv, temporal) + MRT (masked relational transformer, cross-stock attention) |
+| 3 | **Soft MoE** | 3 expert FFNs gated by regime embedding; load-balance loss prevents collapse |
+| 4 | **DDPM** | Denoising diffusion with cosine beta schedule for probabilistic 5-day return prediction |
 
 ## Project Structure
 
 ```
 diffstock_india/
-├── config/
-│   └── config.yaml                  # All hyperparameters
+├── config/config.yaml               # Single source of truth for all hyperparams
 ├── data/
-│   ├── raw/                         # Downloaded CSVs
-│   ├── processed/                   # Cleaned data
-│   └── dataset/                     # Final tensors
+│   ├── raw/                         # Downloaded CSVs (~400 stocks)
+│   ├── processed/                   # Cleaned parquet files
+│   ├── dataset/                     # Final tensors + relation matrices
+│   └── regime/                      # HMM model + daily_regime_probs.parquet
 ├── src/
-│   ├── data/                        # Data pipeline
+│   ├── data/
 │   │   ├── scraper.py               # Download from yfinance/jugaad-data
-│   │   ├── cleaner.py               # Clean and align data
-│   │   ├── validator.py             # Quality checks
-│   │   ├── feature_engineer.py      # Compute 15 technical features
-│   │   ├── relation_builder.py      # Build relation matrices
-│   │   └── dataset_builder.py       # Assemble final dataset
-│   ├── model/                       # Model architecture
-│   │   ├── att_dicem.py             # Temporal encoder
-│   │   ├── mrt.py                   # Relational transformer
-│   │   ├── matches.py               # Combined encoder
-│   │   ├── diffusion.py             # DDPM
-│   │   └── diffstock.py             # Top-level model
-│   ├── training/
-│   │   └── trainer.py               # Training loop with EMA
+│   │   ├── cleaner.py               # Clean, align, handle survivorship bias
+│   │   ├── validator.py             # Quality gates
+│   │   ├── feature_engineer.py      # 16 technical features
+│   │   ├── relation_builder.py      # Sector/industry/correlation matrices
+│   │   ├── regime_detector.py       # HMM regime fitting
+│   │   └── dataset_builder.py       # Sliding window assembly
+│   ├── model/
+│   │   ├── revin.py                 # Reversible Instance Normalization
+│   │   ├── att_dicem.py             # Temporal encoder (dilated causal conv)
+│   │   ├── mrt.py                   # Masked Relational Transformer
+│   │   ├── matches.py               # Combined MaTCHS encoder
+│   │   ├── regime_embedding.py      # HMM regime → learned embedding
+│   │   ├── moe_head.py              # Soft Mixture of Experts
+│   │   ├── diffusion.py             # Adaptive DDPM
+│   │   └── dharma.py                # Top-level model (DHARMA)
+│   ├── training/trainer.py          # Training loop (EMA, AMP, crisis upsampling)
 │   ├── evaluation/
-│   │   ├── metrics.py               # IC, Sharpe, etc.
-│   │   └── backtester.py            # Indian market backtest
+│   │   ├── metrics.py               # IC, ICIR, Sharpe, MCC
+│   │   └── backtester.py            # Indian market backtest with realistic costs
+│   ├── simulation/simulator.py      # End-to-end simulation engine
+│   ├── advisor/                     # AI investment advisor (LLM + model)
 │   └── utils/
-│       ├── logger.py
-│       └── seed.py
 ├── scripts/
 │   ├── run_scrape.py                # Download data
+│   ├── run_full_scrape_and_build.py # Full pipeline (scrape → dataset)
 │   ├── run_train.py                 # Train model
 │   └── run_backtest.py              # Evaluate model
+├── notebooks/
+│   └── DHARMA_Training_Colab.ipynb  # Google Colab training notebook
+├── tests/                           # Model shape + training stability tests
 ├── checkpoints/                     # Saved models
 ├── logs/                            # Training logs
-├── results/                         # Backtest results
 └── requirements.txt
 ```
 
-## Installation
+## Quick Start
 
 ```bash
-# Clone repository
 cd diffstock_india
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-```
 
-## Usage
+# Verify installation
+python verify_installation.py
+```
 
 ### 1. Data Pipeline
 
-Download and process 10 years of Nifty 500 data:
-
 ```bash
-# Step 1: Scrape data (takes 30-60 minutes)
+# Scrape 20 years of Nifty 500 data (30-60 min)
 python scripts/run_scrape.py
 
-# Step 2: Build dataset (automatic - runs all pipeline steps)
-python -c "from src.data.dataset_builder import build_dataset; build_dataset(run_scraping=False)"
+# Build full dataset (clean → features → relations → regime → sliding windows)
+python scripts/run_full_scrape_and_build.py
 ```
 
-This will:
-- Download OHLCV data for ~400 stocks from yfinance/jugaad-data
-- Clean data (handle missing values, outliers, splits/dividends)
-- Validate quality (exclude stocks with >15% missing data)
-- Engineer 15 technical features (RSI, MACD, Bollinger Bands, etc.)
-- Build 3 relation matrices (sector, industry, price correlation)
-- Create sliding window dataset with train/val/test splits
+Output: `data/dataset/nifty500_20yr.npz` + `data/regime/daily_regime_probs.parquet`
 
-**Output**: `data/dataset/nifty500_10yr.npz` (~2,400 training samples)
-
-### 2. Training
-
-Train the DiffSTOCK model:
+### 2. Train
 
 ```bash
 python scripts/run_train.py
 ```
 
-**Training configuration** (from `config/config.yaml`):
-- Batch size: 32
-- Learning rate: 0.0003 (AdamW with cosine annealing)
-- Max epochs: 150 (with early stopping patience=20)
-- EMA decay: 0.995
-- Gradient clipping: 1.0
-- Mixed precision: Automatic (FP16 if GPU available)
+Key training settings (from `config/config.yaml`):
 
-**Model architecture**:
-- d_model: 128
-- MRT heads: 8
-- Att-DiCEm layers: 4 (dilations: 1, 2, 4, 8)
-- MRT layers: 3
-- Diffusion timesteps: 200
+| Param | Value | Notes |
+|-------|-------|-------|
+| Batch size | 16 | |
+| Learning rate | 0.0001 | AdamW + cosine w/ restarts |
+| Max epochs | 300 | patience=50 |
+| EMA decay | 0.999 | |
+| Warmup | 4000 steps | |
+| Crisis upsampling | 3× | GFC, COVID, Demonetization |
 
-**Expected training time**:
-- GPU (RTX 3090): ~2-4 hours
-- CPU: ~12-20 hours
+**Abort gate**: If IC < 0.08 by epoch 30, stop — something is structurally wrong.
 
-### 3. Backtesting
-
-Evaluate trained model on test set:
+### 3. Backtest
 
 ```bash
-# Backtest on test set (2024-07-01 to 2026-02-26)
-python scripts/run_backtest.py --split test
-
-# Backtest on validation set
-python scripts/run_backtest.py --split val
+python scripts/run_backtest.py --split test   # Jul 2024 – Feb 2026
+python scripts/run_backtest.py --split val    # Jan 2023 – Jun 2024
 ```
 
-**Strategy**: Long-only Top-20 with weekly rebalancing
+Strategy: Long-only Top-20, weekly rebalance. Realistic Indian costs (~0.6-0.8% round trip).
 
-**Transaction costs** (realistic Indian market):
-- Brokerage: 0.03%
-- STT: 0.1% (buy) + 0.1% (sell)
-- Exchange charges: 0.00335%
-- GST: 18% on brokerage + exchange
-- Stamp duty: 0.015% (buy)
-- Slippage: 0.2%
-- **Total round-trip: ~0.6-0.8%**
+## Inference
 
-## Model Architecture
+```python
+import torch, numpy as np
+from src.model.dharma import create_dharma_model
 
-### MaTCHS (Conditional Encoder)
+# Load checkpoint
+ckpt = torch.load("checkpoints/<run>/checkpoints/best_model.pt", map_location="cpu", weights_only=False)
+config = ckpt["config"]
+n_stocks = len(np.load("data/dataset/nifty500_20yr.npz", allow_pickle=True)["stock_symbols"])
 
-1. **Att-DiCEm** (Temporal Encoder)
-   - Input: (B, N, L=20, F=15) - 20 days of 15 features per stock
-   - 4 dilated causal conv layers (receptive field = 20 days)
-   - Depthwise separable convs for efficiency
-   - Attention gating on final timestep
-   - Output: (B, N, d_model=128)
+# Build model + load EMA weights
+model = create_dharma_model(config, n_stocks)
+model.load_state_dict(ckpt["model_state_dict"])
+model.eval()
 
-2. **MRT** (Cross-Stock Relational Encoder)
-   - Input: (B, N, d_model) stock embeddings
-   - 3 transformer blocks with relation-based masking
-   - Stocks only attend to related stocks (sector/industry/correlated)
-   - Output: (B, N, d_model) relational embeddings
+# Relation mask
+R_mask = torch.FloatTensor(np.load("data/dataset/relation_matrices.npz")["R_mask"])
 
-### Adaptive DDPM (Diffusion Model)
+# Predict
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model, R_mask = model.to(device), R_mask.to(device)
 
-- **Forward**: x_0 (returns) → x_T (noise) via cosine schedule
-- **Reverse**: x_T → x_0 conditioned on MaTCHS embeddings
-- T=200 diffusion steps (reduced for limited data)
-- Denoising network: MLP with time + condition injection
-- Inference: Generate 50 samples → mean prediction + uncertainty
-
-### Total Parameters
-
+with torch.no_grad():
+    # X: (B, 20, N, 16) float32 — 20-day lookback windows
+    predictions, uncertainty = model(X.to(device), R_mask, n_samples=50)
+    # predictions: (B, N) — 5-day forward return signal (use as rank)
+    # uncertainty: (B, N) — std across 50 diffusion samples
 ```
-MaTCHS:
-  Att-DiCEm:     ~1.2M parameters
-  MRT:           ~2.5M parameters
-Diffusion:       ~3.8M parameters
-Total:           ~7.5M parameters
-```
+
+### Input Features (16)
+
+| # | Feature | Description |
+|---|---------|-------------|
+| 0–3 | `open/high/low/close_ret` | OHLC returns vs prev close |
+| 4 | `log_volume` | log(volume) |
+| 5 | `hl_spread` | (High-Low)/Close |
+| 6–7 | `rsi_14`, `rsi_5` | RSI indicators |
+| 8 | `bb_pct` | Bollinger %B (20d) |
+| 9–10 | `vol_ratio_5`, `vol_ratio_20` | Volume ratios |
+| 11 | `macd_signal` | MACD signal line |
+| 12 | `atr_14` | ATR-14 / Close |
+| 13–14 | `mom_5`, `mom_20` | 5d and 20d momentum |
+| 15 | `close_vwap` | Close/VWAP deviation |
+
+With `revin.enabled: true`, raw features are passed in — RevIN normalizes per-window at runtime.
+
+## IC Targets by Epoch
+
+| Checkpoint | IC Target | What it validates |
+|------------|-----------|-------------------|
+| Epoch 30 | ≥ 0.08 | Minimum viable signal (abort if below) |
+| Epoch 50 | ≥ 0.12 | RevIN working correctly |
+| Epoch 100 | ≥ 0.18 | HMM regime embedding contributing |
+| Epoch 150 | ≥ 0.22 | MoE routing stabilized |
+| Final | ≥ 0.25 | Deployment consideration |
+
+## Transaction Costs (Indian Market)
+
+| Component | Rate |
+|-----------|------|
+| Brokerage | 0.03% |
+| STT (buy + sell) | 0.1% + 0.1% |
+| Exchange charges | 0.00335% |
+| SEBI turnover | 0.0001% |
+| GST | 18% on brokerage + exchange |
+| Stamp duty | 0.015% (buy) |
+| Slippage | 0.2% |
+| **Total round-trip** | **~0.6-0.8%** |
 
 ## Evaluation Metrics
 
-### Signal Quality
-- **IC** (Information Coefficient): Spearman rank correlation - Target: >0.05
-- **ICIR** (IC Information Ratio): IC mean / IC std - Target: >0.5
-- **Rank IC**: IC on rank-transformed predictions
+- **IC** (Information Coefficient) — Spearman rank correlation between predicted and actual returns
+- **ICIR** — IC mean / IC std (consistency)
+- **Sharpe Ratio** — Risk-adjusted annualized returns
+- **Max Drawdown** — Peak-to-trough decline
+- **Win Rate** — % of positive return rebalance periods
+- **MCC** — Matthews Correlation Coefficient (directional accuracy)
 
-### Portfolio Performance
-- **Sharpe Ratio**: Risk-adjusted returns (annualized)
-- **Max Drawdown**: Peak-to-trough decline
-- **Total Return**: Cumulative return over test period
-- **Win Rate**: Percentage of positive return days
+## Config Reference
 
-### Classification
-- **Accuracy**: Direction prediction (up/down)
-- **MCC**: Matthews Correlation Coefficient (balanced metric)
+All hyperparameters live in `config/config.yaml`. Key sections:
 
-## Expected Performance
-
-Based on DiffSTOCK paper and Indian market characteristics:
-
-| Metric | Target | Notes |
-|--------|--------|-------|
-| Test IC | 0.04-0.07 | Indian markets have lower IC than US/China |
-| Test ICIR | 0.3-0.6 | Consistency measure |
-| Sharpe Ratio | 1.0-1.5 | Top-20 long-only strategy |
-| Max Drawdown | -15% to -25% | Typical for emerging markets |
-| Accuracy | 52-55% | Directional prediction |
-
-## Configuration
-
-All hyperparameters in `config/config.yaml`:
-
-**Data**:
-```yaml
-start_date: "2015-01-01"
-end_date: "2026-02-26"
-lookback_window: 20
-n_features: 15
-corr_threshold: 0.4
-```
-
-**Model**:
-```yaml
-d_model: 128
-n_heads_mrt: 8
-n_layers_dicem: 4
-n_layers_mrt: 3
-diffusion_T: 200
-```
-
-**Training**:
-```yaml
-batch_size: 32
-learning_rate: 0.0003
-max_epochs: 150
-patience: 20
-ema_decay: 0.995
-```
-
-## Advanced Usage
-
-### Hyperparameter Tuning (Optional)
-
-Create `src/training/hyperopt.py` using Optuna for automated hyperparameter search:
-
-```python
-# Search space:
-# - d_model: [64, 96, 128, 192]
-# - n_heads: [4, 8, 16]
-# - diffusion_T: [100, 150, 200, 300]
-# - learning_rate: [1e-4, 1e-2]
-# - lookback_window: [10, 15, 20, 30]
-```
-
-### Custom Relation Matrices
-
-Modify `src/data/relation_builder.py` to add custom relations:
-- Supply chain relationships
-- Ownership networks
-- News sentiment correlation
-
-### Integration with Trading System
-
-```python
-from src.model.diffstock import DiffSTOCK
-import torch
-
-# Load trained model
-model = DiffSTOCK(...)
-checkpoint = torch.load('checkpoints/best_model.pt')
-model.load_state_dict(checkpoint['model_state_dict'])
-
-# Make predictions
-model.eval()
-with torch.no_grad():
-    predictions, uncertainty = model(x, R_mask, n_samples=50)
-
-# Use predictions for portfolio construction
-top_k_stocks = predictions.argsort()[-20:]  # Top 20
-```
+| Section | Controls |
+|---------|----------|
+| `data` | Date range, features, quality thresholds, crisis periods |
+| `revin` | Reversible instance normalization (enabled, robust, affine) |
+| `hmm` | HMM regime detector (n_regimes, features, smoothing) |
+| `model` | MaTCHS dimensions, dropout, diffusion params |
+| `model.moe` | Mixture of Experts (n_experts, gating, load balance) |
+| `training` | LR, scheduler, epochs, patience, crisis upsampling |
+| `evaluation` | IC targets, transaction costs, rebalance freq |
+| `paths` | All directory paths |
 
 ## References
 
-1. **DiffSTOCK** (ICASSP 2024): "Diffusion Model for Stock Price Prediction"
-2. **HIST** (Wentao Xu, 2021): "HIST: A Graph-based Framework for Stock Trend Forecasting"
-3. **MASTER** (AAAI 2024): "MASTER: Market-Guided Stock Transformer for Stock Price Forecasting"
+- [Stock Top Papers](https://github.com/marcuswang6/stock-top-papers) — curated collection of stock prediction papers
+- **DiffSTOCK** (ICASSP 2024) — base diffusion architecture for stock prediction
+- **MASTER** (AAAI 2024) — market-guided stock transformer
+- **HIST** (Wentao Xu, 2021) — graph-based stock trend forecasting
+- **MERA** — mixture of experts with retrieval augmentation (inspiration for regime-gated MoE)
+- **RevIN** (Kim et al. 2021) — reversible instance normalization for time series
 
-## Regulatory Compliance
+## Regulatory
 
-- **SEBI Compliant**: Model follows SEBI guidelines for algorithmic trading
-- **Risk Management**: Built-in position limits, drawdown controls
-- **Audit Trail**: All predictions and trades logged
-- **Paper Trading**: Test thoroughly before live deployment
+- SEBI-compliant algorithmic trading guidelines
+- Built-in position limits + drawdown controls
+- Full audit trail (all predictions logged)
+- Paper trade before live deployment
 
 ## Troubleshomenshooting
 

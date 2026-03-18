@@ -288,11 +288,12 @@ class RegimeDetector:
 def fit_regime_model(config: dict) -> pd.DataFrame:
     """Entry point called from dataset build pipeline."""
     root = Path(config["paths"]["root"])
-    output_dir = root / config["data"].get("regime_probs_path", "data/regime/daily_regime_probs.parquet")
-    output_dir = output_dir.parent  # get the directory
+    regime_dir = config.get("paths", {}).get("regime", "data/regime")
+    output_dir = root / regime_dir
 
+    hmm_cfg = config.get("hmm", {})
     detector = RegimeDetector(
-        n_states=config.get("model", {}).get("n_regime_states", 4),
+        n_states=hmm_cfg.get("n_regimes", 4),
         output_dir=output_dir,
         train_end_date=config["training"]["train_end"],
     )

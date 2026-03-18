@@ -1,4 +1,4 @@
-"""Data pipeline modules for DiffSTOCK India."""
+"""Data pipeline modules for DHARMA India."""
 
 from .scraper import NiftyStockScraper
 from .cleaner import DataCleaner

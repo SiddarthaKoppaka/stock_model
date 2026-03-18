@@ -14,7 +14,7 @@ from typing import Optional
 def setup_logger(
     log_dir: Optional[Path] = None,
     log_level: str = "INFO",
-    log_file: str = "diffstock.log"
+    log_file: str = "dharma.log"
 ) -> None:
     """
     Configure loguru logger with console and file handlers.

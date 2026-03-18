@@ -31,7 +31,7 @@ from .relation_builder import build_relation_matrices
 
 class DatasetBuilder:
     """
-    Builds final sliding window dataset for DiffSTOCK training.
+    Builds final sliding window dataset for DHARMA training.
     """
 
     def __init__(
@@ -269,7 +269,7 @@ class DatasetBuilder:
             Path to saved dataset
         """
         logger.info("=" * 80)
-        logger.info("Starting DiffSTOCK Dataset Building Pipeline")
+        logger.info("Starting DHARMA Dataset Building Pipeline")
         logger.info("=" * 80)
 
         # Step 1: Scrape data (optional)
@@ -320,7 +320,7 @@ class DatasetBuilder:
         # Normalized feature columns (legacy rolling z-score, used when use_revin=False)
         norm_feature_cols = [f'{c}_norm' for c in raw_feature_cols]
 
-        use_revin = self.config.get('model', {}).get('use_revin', False)
+        use_revin = self.config.get('revin', {}).get('enabled', False)
         feature_cols = raw_feature_cols if use_revin else norm_feature_cols
         logger.info(f"Feature mode: {'raw (RevIN)' if use_revin else 'rolling z-score (legacy)'}")
 
@@ -345,18 +345,17 @@ class DatasetBuilder:
             split_dates
         )
 
-        # ── Regime probabilities (Change 2) ──────────────────────────────────────
-        use_regime = self.config.get('model', {}).get('use_regime', False)
+        # ── Regime probabilities (HMM section) ────────────────────────────────────
+        use_regime = self.config.get('hmm', {}).get('enabled', False)
         if use_regime:
-            regime_probs_path = (
-                self.root / self.config['data'].get('regime_probs_path', 'data/regime/daily_regime_probs.parquet')
-            )
+            regime_dir = self.config.get('paths', {}).get('regime', 'data/regime')
+            regime_probs_path = self.root / regime_dir / 'daily_regime_probs.parquet'
             if regime_probs_path.exists():
                 logger.info("Attaching regime probabilities to dataset...")
                 regime_df = pd.read_parquet(regime_probs_path)
                 regime_df['date'] = pd.to_datetime(regime_df['date'])
                 regime_df = regime_df.set_index('date')
-                n_states = self.config.get('model', {}).get('n_regime_states', 4)
+                n_states = self.config.get('hmm', {}).get('n_regimes', 4)
                 prob_cols = [f'prob_state_{i}' for i in range(n_states)]
 
                 for split in ['train', 'val', 'test']:

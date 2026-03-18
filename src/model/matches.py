@@ -28,7 +28,7 @@ from .moe_head import RegimeAwareMoE
 
 class MaTCHS(nn.Module):
     """
-    MaTCHS: Complete conditional encoder for DiffSTOCK.
+    MaTCHS: Complete conditional encoder for DHARMA.
 
     Pipeline:
         1. [optional] RevIN normalise per-sample window

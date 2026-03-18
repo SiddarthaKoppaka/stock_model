@@ -1,5 +1,5 @@
 """
-DiffSTOCK India — Relation Matrix Deep Analysis
+DHARMA India — Relation Matrix Deep Analysis
 ================================================
 Run: python3 analyze_relations.py
 """

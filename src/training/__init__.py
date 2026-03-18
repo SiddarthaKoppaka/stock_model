@@ -1,5 +1,5 @@
-"""Training modules for DiffSTOCK."""
+"""Training modules for DHARMA."""
 
-from .trainer import DiffSTOCKTrainer
+from .trainer import DHARMATrainer
 
-__all__ = ['DiffSTOCKTrainer']
+__all__ = ['DHARMATrainer']

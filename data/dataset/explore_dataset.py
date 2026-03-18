@@ -1,5 +1,5 @@
 """
-DiffSTOCK India — Dataset Deep Analysis Script
+DHARMA India — Dataset Deep Analysis Script
 ================================================
 Run: python3 analyze_dataset.py
 Output: Full diagnostic report printed to console
