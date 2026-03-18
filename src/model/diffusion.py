@@ -13,6 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import math
+from typing import Optional
 
 
 class SinusoidalTimeEmbedding(nn.Module):
@@ -238,7 +239,8 @@ class AdaptiveDDPM(nn.Module):
     def compute_loss(
         self,
         x_0: torch.Tensor,
-        condition: torch.Tensor
+        condition: torch.Tensor,
+        valid_mask: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
         """
         Compute training loss (MSE on predicted noise).
@@ -246,6 +248,7 @@ class AdaptiveDDPM(nn.Module):
         Args:
             x_0: (B, N) clean returns
             condition: (B, N, d_model) conditional embeddings
+            valid_mask: (B, N) bool — True where label is MISSING (skip these positions)
 
         Returns:
             Scalar loss
@@ -265,8 +268,15 @@ class AdaptiveDDPM(nn.Module):
         # Predict noise
         noise_pred = self.denoiser(x_t, t, condition)
 
-        # MSE loss
-        loss = F.mse_loss(noise_pred, noise)
+        # Masked MSE — exclude positions where the label was NaN
+        if valid_mask is not None:
+            keep = ~valid_mask  # True for valid (non-NaN) positions
+            if keep.any():
+                loss = F.mse_loss(noise_pred[keep], noise[keep])
+            else:
+                loss = (noise_pred * 0).sum()  # all masked — zero loss, no gradient
+        else:
+            loss = F.mse_loss(noise_pred, noise)
 
         return loss
 

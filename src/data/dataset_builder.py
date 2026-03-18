@@ -184,6 +184,17 @@ class DatasetBuilder:
             forward_rets = target_tensor[t+1:t+1+H, :]  # (H, N)
             y = (1 + forward_rets).prod(axis=0) - 1      # (N,) compounded H-day return
 
+            # Cross-sectional z-score: normalize returns relative to the cross-section
+            # so the model learns rank-based signals rather than absolute scale.
+            # Applied only to non-NaN stocks to avoid inflating NaN-contaminated windows.
+            if self.config.get('training', {}).get('use_cs_zscore_labels', False):
+                valid_mask = ~np.isnan(y)
+                if valid_mask.sum() > 1:
+                    mu_cs = y[valid_mask].mean()
+                    std_cs = y[valid_mask].std()
+                    if std_cs > 1e-8:
+                        y = np.where(valid_mask, (y - mu_cs) / std_cs, np.nan)
+
             if np.isnan(X).mean() > 0.5 or np.isnan(y).mean() > 0.5:
                 continue
             current_date = date_index[t-1] 
@@ -209,15 +220,25 @@ class DatasetBuilder:
         dates_all = np.array(date_samples)
         splits_all = np.array(split_labels)
 
-        # Handle NaN values (replace with 0 for normalized features)
+        # Handle NaN values
+        # Features: fill with 0 (mean-of-normalised features — acceptable for sparse missing data)
         nan_count_x = np.isnan(X_all).sum()
-        nan_count_y = np.isnan(y_all).sum()
         if nan_count_x > 0:
             logger.warning(f"Found {nan_count_x} NaN values in X features, filling with 0")
             X_all = np.nan_to_num(X_all, nan=0.0)
+
+        # Labels: preserve NaN as a mask (−1 sentinel stored as a float NaN).
+        # The trainer/loss function must skip positions where y_nan_mask is True.
+        # Zero-filling would inject phantom zero-return stocks into the IC gradient.
+        nan_count_y = np.isnan(y_all).sum()
         if nan_count_y > 0:
-            logger.warning(f"Found {nan_count_y} NaN values in y targets, filling with 0")
-            y_all = np.nan_to_num(y_all, nan=0.0)
+            logger.warning(
+                f"Found {nan_count_y} NaN label values across {(np.isnan(y_all).any(axis=1)).sum()} "
+                f"samples — these positions will be masked during loss computation"
+            )
+        # Build boolean mask (True = missing label, exclude from loss)
+        y_nan_mask = np.isnan(y_all)   # (n_samples, N), dtype bool
+        y_all = np.nan_to_num(y_all, nan=0.0)  # fill NaN with 0 for tensor safety; mask gates the loss
 
         logger.info(f"Total samples created: {len(X_all)}")
 
@@ -243,12 +264,15 @@ class DatasetBuilder:
         dataset = {
             'X_train': X_train,
             'y_train': y_all[train_mask],
+            'y_train_nan_mask': y_nan_mask[train_mask],
             'dates_train': dates_all[train_mask],
             'X_val': X_val,
             'y_val': y_all[val_mask],
+            'y_val_nan_mask': y_nan_mask[val_mask],
             'dates_val': dates_all[val_mask],
             'X_test': X_test,
             'y_test': y_all[test_mask],
+            'y_test_nan_mask': y_nan_mask[test_mask],
             'dates_test': dates_all[test_mask]
         }
 

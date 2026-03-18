@@ -73,10 +73,12 @@ def main():
     y_val   = data['y_val']
     stock_symbols = data['stock_symbols']
 
-    # Optional: dates (for crisis upsampling) and regime_probs
+    # Optional: dates (for crisis upsampling), regime_probs, and NaN masks
     dates_train        = data['dates_train']        if 'dates_train'        in data else None
     regime_probs_train = data['regime_probs_train'] if 'regime_probs_train' in data else None
     regime_probs_val   = data['regime_probs_val']   if 'regime_probs_val'   in data else None
+    y_nan_mask_train   = data['y_train_nan_mask']   if 'y_train_nan_mask'   in data else None
+    y_nan_mask_val     = data['y_val_nan_mask']     if 'y_val_nan_mask'     in data else None
 
     print(f"Train samples: {len(X_train)}")
     print(f"Val samples:   {len(X_val)}")
@@ -132,7 +134,12 @@ def main():
     val_data = (X_val, y_val, regime_probs_val) if regime_probs_val is not None else (X_val, y_val)
 
     # Train
-    history = trainer.train(train_data=train_data, val_data=val_data)
+    history = trainer.train(
+        train_data=train_data,
+        val_data=val_data,
+        y_nan_mask_train=y_nan_mask_train,
+        y_nan_mask_val=y_nan_mask_val,
+    )
 
     print("\nTraining completed!")
     print(f"Best validation IC: {trainer.best_val_ic:.4f}")

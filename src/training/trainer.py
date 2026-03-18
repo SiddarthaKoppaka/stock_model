@@ -13,6 +13,7 @@ Comprehensive training loop with:
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
+from torch.optim.lr_scheduler import LinearLR, CosineAnnealingWarmRestarts, SequentialLR
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -103,11 +104,28 @@ class DHARMATrainer:
             weight_decay=config['training']['weight_decay']
         )
 
-        # LR Scheduler (Cosine annealing with warm restarts)
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+        # LR Scheduler: Linear warmup → Cosine annealing with warm restarts
+        # warmup_steps (epoch-based estimate): config warmup_steps / ~300 batches/epoch
+        self._warmup_epochs = max(1, config['training']['warmup_steps'] // 300)
+        T_0 = config['training'].get('restart_every_n_epochs', 100)
+        eta_min = config['training'].get('lr_min', 1e-6)
+
+        warmup_sched = LinearLR(
             self.optimizer,
-            T_0=30,
-            T_mult=2
+            start_factor=0.01,   # ramp from 1% of target LR
+            end_factor=1.0,
+            total_iters=self._warmup_epochs,
+        )
+        cosine_sched = CosineAnnealingWarmRestarts(
+            self.optimizer,
+            T_0=T_0,
+            T_mult=2,
+            eta_min=eta_min,
+        )
+        self.scheduler = SequentialLR(
+            self.optimizer,
+            schedulers=[warmup_sched, cosine_sched],
+            milestones=[self._warmup_epochs],
         )
 
         # EMA
@@ -129,7 +147,7 @@ class DHARMATrainer:
         # Mixed precision
         self.use_amp = torch.cuda.is_available()
         if self.use_amp:
-            self.scaler = torch.cuda.amp.GradScaler()
+            self.scaler = torch.amp.GradScaler('cuda')
 
         logger.info(f"Trainer initialized on device: {self.device}")
         logger.info(f"Mixed precision: {self.use_amp}")
@@ -162,13 +180,23 @@ class DHARMATrainer:
         pbar = tqdm(train_loader, desc=f"Epoch {self.current_epoch}")
 
         for batch in pbar:
-            # Batch may be (X, y) or (X, y, regime_probs)
-            if len(batch) == 3:
-                X, y, regime_probs = batch
+            # Batch may be (X, y), (X, y, regime_probs), or (X, y, regime_probs, nan_mask)
+            # or (X, y, nan_mask) when regime_probs is absent but mask is present.
+            # TensorDataset order: [X, y, (regime_probs)?, (nan_mask)?]
+            regime_probs = None
+            nan_mask = None
+            if len(batch) == 4:
+                X, y, regime_probs, nan_mask = batch
                 regime_probs = regime_probs.to(self.device)
+                nan_mask = nan_mask.to(self.device)
+            elif len(batch) == 3:
+                X, y, third = batch
+                if third.dtype == torch.bool:
+                    nan_mask = third.to(self.device)
+                else:
+                    regime_probs = third.to(self.device)
             else:
                 X, y = batch
-                regime_probs = None
 
             X = X.to(self.device)  # (B, L, N, F)
             y = y.to(self.device)  # (B, N)
@@ -181,8 +209,9 @@ class DHARMATrainer:
 
             # Forward pass with mixed precision
             if self.use_amp:
-                with torch.cuda.amp.autocast():
-                    loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs)
+                with torch.amp.autocast('cuda'):
+                    loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs,
+                                         valid_mask=nan_mask)
 
                 self.scaler.scale(loss).backward()
                 self.scaler.unscale_(self.optimizer)
@@ -193,7 +222,8 @@ class DHARMATrainer:
                 self.scaler.step(self.optimizer)
                 self.scaler.update()
             else:
-                loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs)
+                loss, _ = self.model(X, self.R_mask, y, regime_probs=regime_probs,
+                                     valid_mask=nan_mask)
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(
                     self.model.parameters(),
@@ -230,7 +260,7 @@ class DHARMATrainer:
             X = X.to(self.device)
             y = y.to(self.device)
 
-            predictions, _ = self.model(X, self.R_mask, n_samples=10, regime_probs=regime_probs)
+            predictions, _ = self.model(X, self.R_mask, n_samples=50, regime_probs=regime_probs)
             all_predictions.append(predictions.cpu().numpy())
             all_targets.append(y.cpu().numpy())
 
@@ -244,13 +274,17 @@ class DHARMATrainer:
         self,
         train_data: Tuple,
         val_data: Tuple,
+        y_nan_mask_train: Optional[np.ndarray] = None,
+        y_nan_mask_val: Optional[np.ndarray] = None,
     ) -> Dict:
         """
         Full training loop.
 
         Args:
-            train_data: (X, y) | (X, y, dates) | (X, y, dates, regime_probs)
-            val_data:   (X, y) | (X, y, regime_probs)
+            train_data:        (X, y) | (X, y, dates) | (X, y, dates, regime_probs)
+            val_data:          (X, y) | (X, y, regime_probs)
+            y_nan_mask_train:  (n_train, N) bool — True where label was NaN (optional)
+            y_nan_mask_val:    (n_val, N)   bool — True where label was NaN (optional)
 
         Returns:
             Training history
@@ -265,6 +299,17 @@ class DHARMATrainer:
             X_train, y_train = train_data
             dates_train = None
             regime_probs_train = None
+
+        # Clip extreme label percentiles (prevents a handful of crisis-day outliers
+        # from dominating the diffusion loss gradient; applied to train labels only,
+        # based on train-set percentiles so val/test are never touched).
+        clip_pct = self.config['training'].get('drop_extreme_label_pct', 0.0)
+        if clip_pct > 0.0:
+            valid_y = y_train[~y_nan_mask_train] if y_nan_mask_train is not None else y_train.flatten()
+            lo = np.nanpercentile(valid_y, clip_pct * 100)
+            hi = np.nanpercentile(valid_y, (1 - clip_pct) * 100)
+            y_train = np.clip(y_train, lo, hi)
+            logger.info(f"Label clipping: [{lo:.4f}, {hi:.4f}] ({clip_pct*100:.1f}% each tail)")
 
         # Unpack val data
         if len(val_data) == 3:
@@ -298,6 +343,8 @@ class DHARMATrainer:
         train_tensors = [torch.FloatTensor(X_train), torch.FloatTensor(y_train)]
         if regime_probs_train is not None:
             train_tensors.append(torch.FloatTensor(regime_probs_train))
+        if y_nan_mask_train is not None:
+            train_tensors.append(torch.BoolTensor(y_nan_mask_train))
         train_dataset = TensorDataset(*train_tensors)
 
         train_loader = DataLoader(

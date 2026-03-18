@@ -85,6 +85,7 @@ class DHARMA(nn.Module):
         y: Optional[torch.Tensor] = None,
         n_samples: int = 50,
         regime_probs: Optional[torch.Tensor] = None,
+        valid_mask: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
         """
         Forward pass.
@@ -95,6 +96,7 @@ class DHARMA(nn.Module):
             y:            (B, N) target returns — training only
             n_samples:    diffusion samples for inference
             regime_probs: (B, n_states) soft HMM regime probabilities (optional)
+            valid_mask:   (B, N) bool — True where label is MISSING; gates diffusion loss
 
         Returns:
             Training (y not None): (loss, None)
@@ -103,7 +105,7 @@ class DHARMA(nn.Module):
         condition, lb_loss = self.matches(x, R_mask, regime_probs)
 
         if self.training and y is not None:
-            diff_loss = self.diffusion.compute_loss(y, condition)
+            diff_loss = self.diffusion.compute_loss(y, condition, valid_mask=valid_mask)
             return diff_loss + lb_loss, None
 
         else:

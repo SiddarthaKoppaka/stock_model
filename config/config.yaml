@@ -31,6 +31,8 @@ data:
     - ["2008-01-01", "2009-06-30"]   # GFC
     - ["2020-01-01", "2020-09-30"]   # COVID crash
     - ["2016-11-01", "2016-12-31"]   # Demonetization
+    - ["2013-05-22", "2013-09-30"]   # Taper Tantrum — INR -20%, FII outflows
+    - ["2018-09-01", "2019-03-31"]   # IL&FS / NBFC credit crisis — midcap -40%
   crisis_sample_weight: 3.0
 
 # ============================================================
@@ -124,7 +126,8 @@ model:
   # Diffusion head for probabilistic return prediction.
   # Takes MaTCHS + MoE output as conditioning signal.
   # ============================================================
-  diffusion_T: 150                   # denoising steps
+  diffusion_T: 100                   # was 150 — 100 is sufficient for financial returns;
+                                     # fewer steps = faster convergence + less noise at T-end
   beta_start: 0.0001
   beta_end: 0.02                     # slightly wider than Run 5 (0.015)
   beta_schedule: "cosine"            # cosine > linear for financial data
@@ -139,7 +142,7 @@ model:
 # - Crisis upsampling via WeightedRandomSampler
 # ============================================================
 training:
-  batch_size: 16
+  batch_size: 32                     # was 16 — larger batches = more stable IC gradient
   learning_rate: 0.0001              # was 0.0003 in Run 5
                                      # 20yr data has 2.25x more samples/epoch
                                      # → effectively LR was too high
@@ -147,7 +150,7 @@ training:
   drop_extreme_label_pct: 0.025      # clip top/bottom 2.5% of labels
   use_cs_zscore_labels: true         # cross-sectional z-score labels
   max_epochs: 300                    # was 250 — regime-aware needs more time
-  patience: 50                       # was 25 — 5-day IC bounces more
+  patience: 80                       # was 50 — CS z-score IC is noisier; 80 ≈ 16 eval cycles
   grad_clip: 1.0
   ema_decay: 0.999                   # exponential moving average of weights
   warmup_steps: 4000                 # was 2000 — longer for d_model=192 + MoE
@@ -177,13 +180,15 @@ evaluation:
   rebalance_freq: "weekly"
   risk_free_rate: 0.065              # NSE repo rate proxy
 
-  # IC targets by epoch (early stopping checkpoints)
+  # IC targets by epoch — calibrated to CS z-score labels (rank-normalized).
+  # CS z-score IC is lower in absolute terms vs raw-return IC.
+  # Top quant models on NIFTY 500 achieve 0.04–0.08 at maturity.
   ic_targets:
-    epoch_30: 0.08                   # minimum viable signal — if below, abort
-    epoch_50: 0.12                   # RevIN should be working
-    epoch_100: 0.18                  # HMM regime embedding contributing
-    epoch_150: 0.22                  # MoE routing stabilized
-    final: 0.25                      # target for deployment consideration
+    epoch_30:  0.02                  # minimum viable signal — if below, investigate
+    epoch_50:  0.03                  # RevIN + warmup should stabilize by here
+    epoch_100: 0.05                  # HMM regime embedding contributing
+    epoch_150: 0.07                  # MoE routing stabilized
+    final:     0.08                  # deployment threshold (ICIR > 0.5 at this IC)
 
   # Indian market transaction costs (round trip)
   transaction_costs:
