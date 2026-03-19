@@ -68,7 +68,7 @@ hmm:
   covariance_type: "full"
   n_iter: 200
   random_state: 42
-  regime_embed_dim: 16               # appended to MaTCHS input
+  regime_embed_dim: 32               # appended to MaTCHS input (expanded from 16→32 for richer regime conditioning)
   fit_on: "nifty50_returns"          # NIFTY50 only, not individual stocks
   feature_set:
     - "log_return"

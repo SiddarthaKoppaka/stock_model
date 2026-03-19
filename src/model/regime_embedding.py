@@ -33,10 +33,10 @@ class RegimeEmbedding(nn.Module):
     def __init__(self, n_states: int = 4, embedding_dim: int = 16):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(n_states, 32),
-            nn.LayerNorm(32),
+            nn.Linear(n_states, 64),
+            nn.LayerNorm(64),
             nn.GELU(),
-            nn.Linear(32, embedding_dim),
+            nn.Linear(64, embedding_dim),
         )
 
     def forward(self, regime_probs: torch.Tensor) -> torch.Tensor:

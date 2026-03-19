@@ -138,10 +138,15 @@ class AttDiCEm(nn.Module):
 
             self.layer_norms.append(nn.LayerNorm(d_model))
 
-        # Attention gate
+        # Temporal aggregation: learned convex combination of last-step and mean-pool
+        # Avoids discarding 19/20 timesteps while keeping causal ordering.
+        self.pool_weight = nn.Parameter(torch.tensor(0.5))  # sigmoid(w) ∈ (0,1)
+
+        # Residual gate: x ← x · (1 + tanh(Wx))
+        # Tanh avoids Sigmoid saturation while preserving directional gating.
         self.attention_gate = nn.Sequential(
             nn.Linear(d_model, d_model),
-            nn.Sigmoid()
+            nn.Tanh()
         )
 
         # Final projection
@@ -197,12 +202,17 @@ class AttDiCEm(nn.Module):
             if residual.shape == x.shape:
                 x = x + residual
 
-        # Take final timestep (L-1)
-        x = x[:, :, -1]  # (B*N, d_model)
+        # Temporal aggregation: weighted combination of last timestep and mean pool.
+        # w = sigmoid(pool_weight) is learned; at init ≈ 0.5 (equal weight).
+        w = torch.sigmoid(self.pool_weight)
+        x_last = x[:, :, -1]        # (B*N, d_model)  – causal last step
+        x_mean = x.mean(dim=-1)     # (B*N, d_model)  – global mean over L
+        x = w * x_last + (1 - w) * x_mean
 
-        # Apply attention gate
+        # Residual gate: modulates feature magnitude without zeroing gradients.
+        # g = tanh(Wx) ∈ (-1,1) → x ← x(1 + g) amplifies/suppresses features.
         gate = self.attention_gate(x)  # (B*N, d_model)
-        x = x * gate
+        x = x * (1.0 + gate)
 
         # Final projection
         x = self.output_proj(x)  # (B*N, d_model)

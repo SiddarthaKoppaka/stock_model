@@ -16,6 +16,31 @@ import math
 from typing import Optional
 
 
+class FiLM(nn.Module):
+    """
+    Feature-wise Linear Modulation layer.
+    Conditions hidden features h on time embedding t:
+        h ← h * (1 + scale(t)) + shift(t)
+    Additive conditioning (h + t) collapses to the same dynamics at every
+    diffusion step; FiLM gives each step a unique affine transform.
+    Ref: Perez et al., "FiLM: Visual Reasoning with a General Conditioning Layer"
+    """
+    def __init__(self, time_dim: int, hidden_dim: int):
+        super().__init__()
+        self.scale = nn.Linear(time_dim, hidden_dim)
+        self.shift = nn.Linear(time_dim, hidden_dim)
+
+    def forward(self, h: torch.Tensor, t_emb: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            h: (B, N, hidden_dim) — feature tensor
+            t_emb: (B, N, time_dim) — time embedding broadcast to all stocks
+        Returns:
+            (B, N, hidden_dim) conditioned features
+        """
+        return h * (1.0 + self.scale(t_emb)) + self.shift(t_emb)
+
+
 class SinusoidalTimeEmbedding(nn.Module):
     """Sinusoidal positional embedding for diffusion timesteps."""
 
@@ -84,15 +109,15 @@ class DenoisingNetwork(nn.Module):
         # Per-stock input projection: x_t[i] scalar + condition[i] d_model vector
         self.input_proj = nn.Linear(1 + d_model, hidden_dim)
 
-        # Shared MLP applied independently to each stock
-        self.mlp = nn.Sequential(
-            nn.SiLU(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.SiLU(),
-            nn.Dropout(0.1),
-            nn.Linear(hidden_dim, hidden_dim // 2),
-            nn.SiLU(),
-        )
+        # FiLM-conditioned MLP: each layer is modulated by the timestep embedding
+        # so each denoising step t has genuinely different feature dynamics.
+        self.fc1  = nn.Linear(hidden_dim, hidden_dim)
+        self.film1 = FiLM(hidden_dim, hidden_dim)
+        self.fc2  = nn.Linear(hidden_dim, hidden_dim // 2)
+        # film2 output must match fc2's output dim (hidden_dim // 2), not hidden_dim
+        self.film2 = FiLM(hidden_dim, hidden_dim // 2)
+        self.drop = nn.Dropout(0.1)
+        self.act  = nn.SiLU()
 
         # Output: scalar noise prediction per stock
         self.output_proj = nn.Linear(hidden_dim // 2, 1)
@@ -125,11 +150,10 @@ class DenoisingNetwork(nn.Module):
         stock_input = torch.cat([x_stock, condition], dim=-1) # (B, N, 1 + d_model)
         h = self.input_proj(stock_input)                      # (B, N, hidden_dim)
 
-        # Add time conditioning
-        h = h + t_embed                                       # (B, N, hidden_dim)
-
-        # Shared MLP applied per stock (batch and stock dims treated as batch)
-        h = self.mlp(h)                                       # (B, N, hidden_dim // 2)
+        # FiLM-conditioned MLP: each diffusion step t gets a distinct affine transform
+        h = self.film1(self.act(self.fc1(h)), t_embed)        # (B, N, hidden_dim)
+        h = self.drop(h)
+        h = self.film2(self.act(self.fc2(h)), t_embed)        # (B, N, hidden_dim//2)
 
         # Predict noise scalar per stock
         noise_pred = self.output_proj(h).squeeze(-1)          # (B, N)

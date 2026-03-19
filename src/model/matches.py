@@ -53,7 +53,7 @@ class MaTCHS(nn.Module):
         use_moe: bool = False,
         # ── regime / MoE hyper-params ─────────────────────────────────────────
         n_regime_states: int = 4,
-        regime_embedding_dim: int = 16,
+        regime_embedding_dim: int = 32,
         n_experts: int = 3,
         expert_hidden_dim: int = 384,
         moe_load_balance_coef: float = 0.01,
@@ -142,6 +142,9 @@ class MaTCHS(nn.Module):
         # 2. Temporal encoding: (B, N, L, F) → (B, N, d_model)
         h = self.att_dicem(x)
 
+        # r_emb may be cached here and reused in MoE step to avoid double compute
+        r_emb = None
+
         # 3. Regime embedding concatenation
         if self.use_regime and regime_probs is not None:
             r_emb = self.regime_embed(regime_probs)           # (B, regime_dim)
@@ -154,8 +157,8 @@ class MaTCHS(nn.Module):
         # 5. MoE routing
         if self.use_moe:
             if regime_probs is not None:
-                r_emb_moe = self.regime_embed(regime_probs) if not self.use_regime \
-                            else self.regime_embed(regime_probs)
+                # Reuse r_emb cached in step 3 when use_regime=True; compute fresh otherwise
+                r_emb_moe = r_emb if r_emb is not None else self.regime_embed(regime_probs)
             else:
                 # Uniform fallback if regime_probs not provided
                 r_emb_moe = torch.zeros(B, self.moe.gate[0].in_features - self.d_model,

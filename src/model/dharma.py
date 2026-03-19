@@ -40,7 +40,7 @@ class DHARMA(nn.Module):
         use_moe: bool = False,
         # ── regime / MoE hyper-params ─────────────────────────────────────────
         n_regime_states: int = 4,
-        regime_embedding_dim: int = 16,
+        regime_embedding_dim: int = 32,
         n_experts: int = 3,
         expert_hidden_dim: int = 384,
         moe_load_balance_coef: float = 0.01,
@@ -168,7 +168,7 @@ def create_dharma_model(config: Dict, n_stocks: int) -> DHARMA:
         use_moe=moe_cfg.get('enabled', False),
         # regime params (from hmm section)
         n_regime_states=hmm_cfg.get('n_regimes', 4),
-        regime_embedding_dim=hmm_cfg.get('regime_embed_dim', 16),
+        regime_embedding_dim=hmm_cfg.get('regime_embed_dim', 32),
         # MoE params (from model.moe section)
         n_experts=moe_cfg.get('n_experts', 3),
         expert_hidden_dim=moe_cfg.get('expert_hidden_dim', 256),
